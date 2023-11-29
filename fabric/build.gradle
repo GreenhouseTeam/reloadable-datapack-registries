@@ -5,9 +5,16 @@ plugins {
     id 'fabric-loom'
 }
 base {
-    archivesName = "${mod_name}-fabric-${minecraft_version}"
+    archivesName = "${mod_id}-fabric-${minecraft_version}"
 }
-
+sourceSets {
+    testmod {
+        compileClasspath += main.compileClasspath
+        runtimeClasspath += main.runtimeClasspath
+        compileClasspath += project(":common").sourceSets.testmod.compileClasspath
+        runtimeClasspath += project(":common").sourceSets.testmod.runtimeClasspath
+    }
+}
 dependencies {
     minecraft "com.mojang:minecraft:${minecraft_version}"
     mappings loom.officialMojangMappings()
@@ -18,12 +25,12 @@ dependencies {
     implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
 
     implementation project(":common")
-    include(implementation(annotationProcessor("io.github.llamalad7:mixinextras-fabric:${mixin_extras_version}")))
+    testmodImplementation project(":common").sourceSets.testmod.output
+    testmodImplementation sourceSets.main.output
 
     compileOnly group:'com.google.auto.service', name:'auto-service', version:'1.0.1'
     annotationProcessor group:'com.google.auto.service', name:'auto-service', version:'1.0.1'
 }
-
 loom {
     if (project(":common").file("src/main/resources/${mod_id}.accesswidener").exists()) {
         accessWidenerPath.set(project(":common").file("src/main/resources/${mod_id}.accesswidener"))
@@ -35,14 +42,20 @@ loom {
         client {
             client()
             setConfigName("Fabric Client")
+            source(sourceSets.testmod)
             ideConfigGenerated(true)
             runDir("run")
+            vmArg("-Dmixin.debug.verbose=true")
+            vmArg("-Dmixin.debug.export=true")
         }
         server {
             server()
             setConfigName("Fabric Server")
+            source(sourceSets.testmod)
             ideConfigGenerated(true)
             runDir("run")
+            vmArg("-Dmixin.debug.verbose=true")
+            vmArg("-Dmixin.debug.export=true")
         }
     }
 }

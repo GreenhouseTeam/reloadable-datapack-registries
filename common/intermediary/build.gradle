@@ -19,7 +19,7 @@ dependencies {
 }
 
 // Credits to Witixin. https://gist.github.com/Witixin1512/bbb8484523ea6a0e8440f17621f89f95
-tasks.register("remapJar", RemapJarTask,  task -> {
+tasks.register("remapCommonJar", RemapJarTask,  task -> {
     final AbstractArchiveTask jarTask = project(":common").getTasks().named("jar", AbstractArchiveTask.class).get();
     task.dependsOn(jarTask)
 
@@ -33,15 +33,15 @@ tasks.register("remapJar", RemapJarTask,  task -> {
 
 tasks.named('build').configure {
     dependsOn.clear()
-    dependsOn('remapJar')
+    dependsOn('remapCommonJar')
 }
 
 publishing {
     publications {
         mavenJava(MavenPublication) {
             artifactId base.archivesName.get()
-            artifact(remapApiJar) {
-                builtBy remapApiJar
+            artifact(remapCommonJar) {
+                builtBy remapCommonJar
                 classifier 'api'
             }
         }

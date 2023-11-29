@@ -3,8 +3,10 @@ package dev.greenhouseteam.reloadabledatapackregistries.platform;
 import dev.greenhouseteam.reloadabledatapackregistries.platform.services.IRDRPlatformHelper;
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
+import org.jetbrains.annotations.Nullable;
 
 public class FabricRDRPlatformHelper implements IRDRPlatformHelper {
 
@@ -23,10 +25,5 @@ public class FabricRDRPlatformHelper implements IRDRPlatformHelper {
     public boolean isDevelopmentEnvironment() {
 
         return FabricLoader.getInstance().isDevelopmentEnvironment();
-    }
-
-    @Override
-    public <T> Registry<T> createRegistry(ResourceKey<Registry<T>> registryKey) {
-        return FabricRegistryBuilder.createSimple(registryKey).buildAndRegister();
     }
 }

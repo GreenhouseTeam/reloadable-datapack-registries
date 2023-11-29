@@ -38,11 +38,4 @@ public interface IRDRPlatformHelper {
 
         return isDevelopmentEnvironment() ? "development" : "production";
     }
-
-    /**
-     * Creates a new registry.
-     *
-     * @return The created registry.
-     */
-    <T> Registry<T> createRegistry(ResourceKey<Registry<T>> registryKey);
 }

@@ -1,9 +1,9 @@
 {
     "schemaVersion": 1,
-    "id": "${mod_id}",
-    "version": "${version}",
-    "name": "${mod_name}",
-    "description": "${description}",
+    "id": "rdrtestmod",
+    "version": "1.0.0",
+    "name": "Reloadable Datapack Registries Testmod",
+    "description": "Reloadable Datapack Registries Testmod",
     "authors": [
         "Greenhouse Team",
         "MerchantPug"
@@ -13,13 +13,14 @@
         "sources": "https://github.com/GreenhouseTeam/reloadable-datapack-registries",
         "issues": "https://github.com/GreenhouseTeam/reloadable-datapack-registries/issues"
     },
-    "license": "${license}",
-    "icon": "assets/${mod_id}/icon.png",
+    "license": "MIT",
+    "icon": "assets/rdrtestmod/icon.png",
     "environment": "*",
-    "mixins": [
-        "${mod_id}.mixins.json",
-        "${mod_id}.fabric.mixins.json"
-    ],
+    "entrypoints": {
+        "main": [
+            "dev.greenhouseteam.rdrtestmod.RDRTestModFabric"
+        ]
+    },
     "depends": {
         "fabricloader": ">=0.14",
         "fabric": "*",

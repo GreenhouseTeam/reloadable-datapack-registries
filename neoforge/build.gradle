@@ -7,9 +7,16 @@ plugins {
     id 'java-library'
 }
 base {
-    archivesName = "${mod_name}-neoforge-${minecraft_version}"
+    archivesName = "${mod_id}-neoforge-${minecraft_version}"
 }
-
+sourceSets {
+    testmod {
+        compileClasspath += main.compileClasspath
+        runtimeClasspath += main.runtimeClasspath
+        compileClasspath += project(":common").sourceSets.testmod.compileClasspath
+        runtimeClasspath += project(":common").sourceSets.testmod.runtimeClasspath
+    }
+}
 // Automatically enable neoforge AccessTransformers if the file exists
 // This location is hardcoded in FML and can not be changed.
 // https://github.com/neoforged/FancyModLoader/blob/a952595eaaddd571fbc53f43847680b00894e0c1/loader/src/main/java/net/neoforged/fml/loading/moddiscovery/ModFile.java#L118
@@ -18,22 +25,30 @@ if (file('src/main/resources/META-INF/accesstransformer.cfg').exists()) {
 }
 runs {
     configureEach {
-        modSource project.sourceSets.main
+        modSource project.sourceSets.testmod
     }
     client {
         systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+        jvmArgument "-Dmixin.debug.export=true"
+        jvmArgument "-Dmixin.debug.verbose=true"
     }
     server {
         systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
         programArgument '--nogui'
+        jvmArgument "-Dmixin.debug.export=true"
+        jvmArgument "-Dmixin.debug.verbose=true"
     }
 
     gameTestServer {
         systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+        jvmArgument "-Dmixin.debug.export=true"
+        jvmArgument "-Dmixin.debug.verbose=true"
     }
 
     data {
         programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
+        jvmArgument "-Dmixin.debug.export=true"
+        jvmArgument "-Dmixin.debug.verbose=true"
     }
 }
 
@@ -42,11 +57,11 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 dependencies {
     implementation "net.neoforged:neoforge:${neoforge_version}"
 
-    compileOnly project(":common")
+    compileOnly project(':common')
+    testmodCompileOnly project(":common").sourceSets.test.output
 
-    implementation(jarJar("io.github.llamalad7:mixinextras-neoforge:${mixin_extras_version}")) {
-        jarJar.ranged(it, "[${mixin_extras_version},)")
-    }
+    compileOnly group:'com.google.auto.service', name:'auto-service', version:'1.0.1'
+    annotationProcessor group:'com.google.auto.service', name:'auto-service', version:'1.0.1'
 }
 
 // NeoGradle compiles the game, but we don't want to add our common code to the game's code
@@ -64,12 +79,20 @@ tasks.named("sourcesJar", Jar) {
     from(project(":common").sourceSets.main.allSource)
 }
 
+tasks.named("compileTestJava", JavaCompile) {
+    source(project(":common").sourceSets.test.allSource)
+}
+
 tasks.withType(ProcessResources).matching(notNeoTask).configureEach {
     from project(":common").sourceSets.main.resources
 
     filesMatching("*.mixins.json") {
         filter(LineContains, negate: true, contains: ['refmap' ] )
     }
+}
+
+processTestResources {
+    from project(":common").sourceSets.test.resources
 }
 
 publishing {

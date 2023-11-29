@@ -1,5 +1,6 @@
 package dev.greenhouseteam.reloadabledatapackregistries.platform;
 
+import com.google.auto.service.AutoService;
 import dev.greenhouseteam.reloadabledatapackregistries.platform.services.IRDRPlatformHelper;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
@@ -7,6 +8,7 @@ import net.neoforged.fml.ModList;
 import net.neoforged.fml.loading.FMLLoader;
 import net.neoforged.neoforge.registries.RegistryBuilder;
 
+@AutoService(IRDRPlatformHelper.class)
 public class NeoRDRPlatformHelper implements IRDRPlatformHelper {
 
     @Override
@@ -27,8 +29,4 @@ public class NeoRDRPlatformHelper implements IRDRPlatformHelper {
         return !FMLLoader.isProduction();
     }
 
-    @Override
-    public <T> Registry<T> createRegistry(ResourceKey<Registry<T>> registryKey) {
-        return new RegistryBuilder<>(registryKey).create();
-    }
 }
