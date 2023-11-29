@@ -1,7 +1,9 @@
+import org.apache.tools.ant.filters.LineContains
+
 plugins {
     id 'idea'
     id 'maven-publish'
-    id 'net.neoforged.gradle.userdev' version '7.0.41'
+    id 'net.neoforged.gradle.userdev' version '7.0.52'
     id 'java-library'
 }
 base {
@@ -39,7 +41,12 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 dependencies {
     implementation "net.neoforged:neoforge:${neoforge_version}"
+
     compileOnly project(":common")
+
+    implementation(jarJar("io.github.llamalad7:mixinextras-neoforge:${mixin_extras_version}")) {
+        jarJar.ranged(it, "[${mixin_extras_version},)")
+    }
 }
 
 // NeoGradle compiles the game, but we don't want to add our common code to the game's code
@@ -59,6 +66,10 @@ tasks.named("sourcesJar", Jar) {
 
 tasks.withType(ProcessResources).matching(notNeoTask).configureEach {
     from project(":common").sourceSets.main.resources
+
+    filesMatching("*.mixins.json") {
+        filter(LineContains, negate: true, contains: ['refmap' ] )
+    }
 }
 
 publishing {
