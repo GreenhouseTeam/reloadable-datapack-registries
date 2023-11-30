@@ -10,6 +10,9 @@ base {
     archivesName = "${mod_id}-neoforge-${minecraft_version}"
 }
 sourceSets {
+    test {
+        compileClasspath += main.compileClasspath
+    }
     testmod {
         compileClasspath += main.compileClasspath
         runtimeClasspath += main.runtimeClasspath
