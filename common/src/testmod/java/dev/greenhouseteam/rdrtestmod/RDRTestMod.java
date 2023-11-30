@@ -37,7 +37,7 @@ public class RDRTestMod {
                         JsonElement jsonelement = JsonParser.parseReader(reader);
                         DataResult<BasicRecord> dataResult = BasicRecord.CODEC.parse(ops, jsonelement);
                         BasicRecord basicRecord = dataResult.getOrThrow(false, s -> {});
-                        LOG.info(resourceKey.location() + " has been loaded. --- The color is '{}' and the entity type is '{}'.", basicRecord.color(), basicRecord.entityType().unwrapKey().isEmpty() ? null : basicRecord.entityType().unwrapKey().get().location());
+                        LOG.info("\033[30;107m" + resourceKey.location() + " has been loaded. --- The color is '{}' and the entity type is '{}'." + "\033[39;49m", basicRecord.color(), basicRecord.entityType().unwrapKey().isEmpty() ? null : basicRecord.entityType().unwrapKey().get().location());
                     } catch (Throwable throwable) {
                         try {
                             reader.close();
