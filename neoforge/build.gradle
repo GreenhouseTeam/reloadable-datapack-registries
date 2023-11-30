@@ -52,7 +52,9 @@ dependencies {
     implementation "net.neoforged:neoforge:${neoforge_version}"
 
     compileOnly project(path: ':common', configuration: 'api')
+    testCompileOnly project(path: ':common', configuration: 'api')
     compileOnly project(':common')
+    testCompileOnly project(':common')
     testmodImplementation project(":common").sourceSets.testmod.output
     testmodImplementation sourceSets.main.output
 
