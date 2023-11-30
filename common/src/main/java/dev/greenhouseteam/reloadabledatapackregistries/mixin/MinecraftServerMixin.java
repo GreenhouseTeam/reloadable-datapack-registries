@@ -40,7 +40,9 @@ public abstract class MinecraftServerMixin {
                 RegistryAccess.Frozen frozen = new RegistryAccess.ImmutableRegistryAccess(previous.registries().filter(registryEntry -> !ReloadableDatapackRegistries.isReloadableRegistry(registryEntry.key()))).freeze();
                 RegistryAccess.Frozen loadedFrozen = RegistryDataLoader.load(this.getResourceManager(), frozen, ReloadableDatapackRegistries.getOrCreateAllRegistryData());
                 this.registries().replaceFrom(RegistryLayer.RELOADABLE, loadedFrozen);
-                IRDRPlatformHelper.INSTANCE.sendReloadPacket(new ReloadRegistriesClientboundPacket(loadedFrozen), this.getPlayerList().getPlayers());
+                if (ReloadableDatapackRegistries.hasNetworkableRegistries()) {
+                    IRDRPlatformHelper.INSTANCE.sendReloadPacket(new ReloadRegistriesClientboundPacket(new RegistryAccess.ImmutableRegistryAccess(loadedFrozen.registries().filter(registryEntry -> ReloadableDatapackRegistries.isNetworkable(registryEntry.key()))).freeze()), this.getPlayerList().getPlayers());
+                }
             } catch (Exception ex) {
                 reloadabledatapackregistries$previousFrozenAccess = null;
                 cir.setReturnValue(CompletableFuture.failedFuture(ex));

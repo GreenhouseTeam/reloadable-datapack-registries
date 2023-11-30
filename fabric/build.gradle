@@ -74,6 +74,10 @@ processResources {
     from project(":common").sourceSets.main.resources
 }
 
+processTestmodResources {
+    from project(":common").sourceSets.testmod.resources
+}
+
 publishing {
     publications {
         mavenJava(MavenPublication) {

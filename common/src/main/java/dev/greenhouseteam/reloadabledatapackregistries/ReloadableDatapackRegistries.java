@@ -48,6 +48,10 @@ public class ReloadableDatapackRegistries {
 		return RELOADABLE_REGISTRY_DATA.containsKey(registryKey);
 	}
 
+	public static boolean hasNetworkableRegistries() {
+		return !NETWORKABLE_REGISTRIES.isEmpty();
+	}
+
 	public static <T> ReloadableRegistryData<T> getReloadableRegistryData(ResourceKey<? extends Registry<T>> resourceKey) {
 		return (ReloadableRegistryData<T>) RELOADABLE_REGISTRY_DATA.get(resourceKey);
 	}
@@ -58,6 +62,14 @@ public class ReloadableDatapackRegistries {
 		}
 
 		return ImmutableList.copyOf(RELOADABLE_REGISTRY_DATA.values().stream().sorted(ReloadableRegistryData::compareTo).map(ReloadableRegistryData::getRegistryData).toList());
+	}
+
+	public static List<RegistrySynchronization.NetworkedRegistryData<?>> getOrCreateAllNetworkData() {
+		if (!hasLoaded) {
+			throw new UnsupportedOperationException("Called ReloadableDatapackRegistries#getOrCreateAllNetworkData too early, please call it after registration.");
+		}
+
+		return ImmutableList.copyOf(NETWORKABLE_REGISTRIES.values().stream().sorted((o1, o2) -> RELOADABLE_REGISTRY_DATA.get(o1.key()).compareTo(RELOADABLE_REGISTRY_DATA.get(o2.key()))).toList());
 	}
 
 	protected static void addNetworkCodecToMap(ResourceKey<? extends Registry<?>> key, RegistrySynchronization.NetworkedRegistryData<?> data) {

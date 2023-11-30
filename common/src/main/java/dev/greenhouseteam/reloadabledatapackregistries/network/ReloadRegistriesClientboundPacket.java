@@ -10,7 +10,6 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.RegistryDataLoader;
 import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceLocation;
 
@@ -30,7 +29,7 @@ public record ReloadRegistriesClientboundPacket(RegistryAccess.Frozen registryHo
     }
 
     public void encode(FriendlyByteBuf buf) {
-        buf.writeWithCodec(BUILTIN_CONTEXT_OPS, ReloadableDatapackRegistries.getOrCreateNetworkCodec(), this.registryHolder);
+        buf.writeWithCodec(BUILTIN_CONTEXT_OPS, ReloadableDatapackRegistries.getOrCreateNetworkCodec(), this.registryHolder());
     }
 
     public ResourceLocation getFabricId() {
@@ -44,9 +43,8 @@ public record ReloadRegistriesClientboundPacket(RegistryAccess.Frozen registryHo
     public void handle() {
         Minecraft.getInstance().execute(() -> {
             ClientPacketListener clientPacketListener = Minecraft.getInstance().getConnection();
-            RegistryAccess.Frozen frozen = new RegistryAccess.ImmutableRegistryAccess(clientPacketListener.registryAccess().registries().filter(registryEntry -> !ReloadableDatapackRegistries.isReloadableRegistry(registryEntry.key()))).freeze();
-            RegistryAccess.Frozen loadedFrozen = RegistryDataLoader.load(Minecraft.getInstance().getResourceManager(), frozen, ReloadableDatapackRegistries.getOrCreateAllRegistryData());
-            RegistryAccess.ImmutableRegistryAccess newRegistryAccess = new RegistryAccess.ImmutableRegistryAccess(Stream.concat(frozen.registries(), loadedFrozen.registries()));
+            RegistryAccess.Frozen frozen = new RegistryAccess.ImmutableRegistryAccess(clientPacketListener.registryAccess().registries().filter(registryEntry -> !ReloadableDatapackRegistries.isNetworkable(registryEntry.key()))).freeze();
+            RegistryAccess.ImmutableRegistryAccess newRegistryAccess = new RegistryAccess.ImmutableRegistryAccess(Stream.concat(frozen.registries(), registryHolder().registries()));
             if (clientPacketListener.getConnection().getPacketListener() == null) return;
             ((ClientPacketListenerAccessor)clientPacketListener).reloadabledatapackregistries$setRegistryAccess(newRegistryAccess.freeze());
         });
