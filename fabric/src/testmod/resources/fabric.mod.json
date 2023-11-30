@@ -19,6 +19,9 @@
     "entrypoints": {
         "main": [
             "dev.greenhouseteam.rdrtestmod.RDRTestModFabric"
+        ],
+        "reloadable_datapack_registries": [
+            "dev.greenhouseteam.rdrtestmod.TestModReloadableRegistries"
         ]
     },
     "depends": {

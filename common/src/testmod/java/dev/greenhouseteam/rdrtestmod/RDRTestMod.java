@@ -4,10 +4,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
-import dev.greenhouseteam.reloadabledatapackregistries.ReloadableDatapackRegistries;
+import dev.greenhouseteam.reloadabledatapackregistries.CustomDataLoader;
 import net.minecraft.core.Registry;
-import net.minecraft.core.RegistrySetBuilder;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.FileToIdConverter;
 import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceKey;
@@ -20,18 +18,15 @@ import java.io.Reader;
 import java.util.Map;
 
 public class RDRTestMod {
-    public static final ResourceKey<Registry<BasicRecord>> BASIC_RECORD_REGISTRY_KEY = ResourceKey.createRegistryKey(new ResourceLocation("rdrtestmod", "basic_record"));
+    public static final ResourceKey<Registry<BasicRecord>> BASIC_RECORD = ResourceKey.createRegistryKey(new ResourceLocation("rdrtestmod", "basic_record"));
     ;
-    public static final ResourceKey<Registry<BasicRecord>> LOG_REGISTRY_KEY = ResourceKey.createRegistryKey(new ResourceLocation("rdrtestmod", "log"));
+    public static final ResourceKey<Registry<BasicRecord>> LOG_REGISTRY = ResourceKey.createRegistryKey(new ResourceLocation("rdrtestmod", "log"));
 
     public static final Logger LOG = LoggerFactory.getLogger("RDR Test Mod");
 
-    public static void init() {
-        ReloadableDatapackRegistries.setupReloadableRegistry(BASIC_RECORD_REGISTRY_KEY, BasicRecord.CODEC);
-        ReloadableDatapackRegistries.setupReloadableRegistry(LOG_REGISTRY_KEY, BasicRecord.CODEC, null);
-
-        ReloadableDatapackRegistries.setCustomDataLoader(LOG_REGISTRY_KEY, (lookup, resourceManager, registry, exceptionMap) -> {
-            FileToIdConverter fileToIdConverter = FileToIdConverter.json(LOG_REGISTRY_KEY.location().getNamespace() + "/" + LOG_REGISTRY_KEY.location().getPath());
+    protected static CustomDataLoader<BasicRecord> logCustomDataLoader() {
+        return (lookup, resourceManager, registry, exceptionMap) -> {
+            FileToIdConverter fileToIdConverter = FileToIdConverter.json(LOG_REGISTRY.location().getNamespace() + "/" + LOG_REGISTRY.location().getPath());
             RegistryOps<JsonElement> ops = RegistryOps.create(JsonOps.INSTANCE, lookup);
             for (Map.Entry<ResourceLocation, Resource> entry : fileToIdConverter.listMatchingResources(resourceManager).entrySet()) {
                 Resource resource = entry.getValue();
@@ -54,14 +49,6 @@ public class RDRTestMod {
                     exceptionMap.put(resourceKey, ex);
                 }
             }
-        });
-    }
-
-    private static RegistrySetBuilder.RegistryBootstrap<BasicRecord> basicRecordBootstrap() {
-        return bootstapContext -> bootstapContext.register(ResourceKey.create(LOG_REGISTRY_KEY, new ResourceLocation("rdrtestmod", "default")), new BasicRecord("white", bootstapContext.lookup(Registries.ENTITY_TYPE).getOrThrow(ResourceKey.create(Registries.ENTITY_TYPE, new ResourceLocation("rabbit")))));
-    }
-
-    private static RegistrySetBuilder.RegistryBootstrap<BasicRecord> logBootstrap() {
-        return bootstapContext -> bootstapContext.register(ResourceKey.create(LOG_REGISTRY_KEY, new ResourceLocation("rdrtestmod", "default")), new BasicRecord("morally_gray", bootstapContext.lookup(Registries.ENTITY_TYPE).getOrThrow(ResourceKey.create(Registries.ENTITY_TYPE, new ResourceLocation("player")))));
+        };
     }
 }

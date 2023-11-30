@@ -1,8 +1,10 @@
 package dev.greenhouseteam.reloadabledatapackregistries.platform.services;
 
+import dev.greenhouseteam.reloadabledatapackregistries.network.ReloadRegistriesClientboundPacket;
 import dev.greenhouseteam.reloadabledatapackregistries.platform.ServiceUtil;
-import net.minecraft.core.Registry;
-import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerPlayer;
+
+import java.util.List;
 
 public interface IRDRPlatformHelper {
     IRDRPlatformHelper INSTANCE = ServiceUtil.load(IRDRPlatformHelper.class);
@@ -38,4 +40,9 @@ public interface IRDRPlatformHelper {
 
         return isDevelopmentEnvironment() ? "development" : "production";
     }
+
+    void invokeEntrypoints();
+
+    void sendReloadPacket(ReloadRegistriesClientboundPacket packet, List<ServerPlayer> serverPlayers);
+
 }
