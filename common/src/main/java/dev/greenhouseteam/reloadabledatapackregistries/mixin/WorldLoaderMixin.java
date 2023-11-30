@@ -1,7 +1,7 @@
 package dev.greenhouseteam.reloadabledatapackregistries.mixin;
 
 import com.mojang.datafixers.util.Pair;
-import dev.greenhouseteam.reloadabledatapackregistries.ReloadableDatapackRegistries;
+import dev.greenhouseteam.reloadabledatapackregistries.impl.ReloadableDatapackRegistries;
 import net.minecraft.core.LayeredRegistryAccess;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.RegistryDataLoader;

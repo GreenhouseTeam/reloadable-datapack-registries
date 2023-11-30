@@ -1,6 +1,6 @@
 package dev.greenhouseteam.reloadabledatapackregistries.mixin;
 
-import dev.greenhouseteam.reloadabledatapackregistries.ReloadableDatapackRegistries;
+import dev.greenhouseteam.reloadabledatapackregistries.impl.ReloadableDatapackRegistries;
 import dev.greenhouseteam.reloadabledatapackregistries.network.ReloadRegistriesClientboundPacket;
 import dev.greenhouseteam.reloadabledatapackregistries.platform.services.IRDRPlatformHelper;
 import net.minecraft.core.LayeredRegistryAccess;
@@ -10,7 +10,9 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.RegistryLayer;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.players.PlayerList;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -26,6 +28,8 @@ public abstract class MinecraftServerMixin {
     @Unique
     private RegistryAccess.Frozen reloadabledatapackregistries$previousFrozenAccess;
     @Shadow public abstract LayeredRegistryAccess<RegistryLayer> registries();
+    @Final @Shadow @Mutable
+    private LayeredRegistryAccess<RegistryLayer> registries;
 
     @Shadow public abstract ResourceManager getResourceManager();
 
@@ -39,7 +43,7 @@ public abstract class MinecraftServerMixin {
             try {
                 RegistryAccess.Frozen frozen = new RegistryAccess.ImmutableRegistryAccess(previous.registries().filter(registryEntry -> !ReloadableDatapackRegistries.isReloadableRegistry(registryEntry.key()))).freeze();
                 RegistryAccess.Frozen loadedFrozen = RegistryDataLoader.load(this.getResourceManager(), frozen, ReloadableDatapackRegistries.getOrCreateAllRegistryData());
-                this.registries().replaceFrom(RegistryLayer.RELOADABLE, loadedFrozen);
+                this.registries = this.registries().replaceFrom(RegistryLayer.RELOADABLE, loadedFrozen);
                 if (ReloadableDatapackRegistries.hasNetworkableRegistries()) {
                     IRDRPlatformHelper.INSTANCE.sendReloadPacket(new ReloadRegistriesClientboundPacket(new RegistryAccess.ImmutableRegistryAccess(loadedFrozen.registries().filter(registryEntry -> ReloadableDatapackRegistries.isNetworkable(registryEntry.key()))).freeze()), this.getPlayerList().getPlayers());
                 }

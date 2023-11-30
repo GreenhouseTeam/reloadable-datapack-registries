@@ -21,7 +21,7 @@
             "dev.greenhouseteam.rdrtestmod.RDRTestModFabric"
         ],
         "reloadable_datapack_registries": [
-            "dev.greenhouseteam.rdrtestmod.TestModReloadableRegistries"
+            "dev.greenhouseteam.rdrtestmod.TestModReloadableRegistriesPlugin"
         ]
     },
     "depends": {

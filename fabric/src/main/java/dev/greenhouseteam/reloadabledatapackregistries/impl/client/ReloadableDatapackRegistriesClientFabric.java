@@ -1,4 +1,4 @@
-package dev.greenhouseteam.reloadabledatapackregistries.client;
+package dev.greenhouseteam.reloadabledatapackregistries.impl.client;
 
 import dev.greenhouseteam.reloadabledatapackregistries.network.ReloadableDatapackRegistriesPackets;
 import net.fabricmc.api.ClientModInitializer;

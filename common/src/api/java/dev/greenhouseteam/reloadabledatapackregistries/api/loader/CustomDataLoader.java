@@ -1,4 +1,4 @@
-package dev.greenhouseteam.reloadabledatapackregistries;
+package dev.greenhouseteam.reloadabledatapackregistries.api.loader;
 
 import net.minecraft.core.WritableRegistry;
 import net.minecraft.resources.RegistryOps;

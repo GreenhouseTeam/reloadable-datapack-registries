@@ -8,10 +8,22 @@ base {
     archivesName = "${mod_id}-common"
 }
 sourceSets {
+    api {
+        java
+        resources
+        compileClasspath += sourceSets.main.compileClasspath
+    }
+    main {
+        compileClasspath += sourceSets.api.output
+        runtimeClasspath += sourceSets.api.output
+    }
     testmod {
         compileClasspath += main.compileClasspath
         runtimeClasspath += main.runtimeClasspath
     }
+}
+configurations {
+    api
 }
 minecraft {
     version(minecraft_version)
@@ -24,7 +36,26 @@ dependencies {
 
     compileOnly group:'org.spongepowered', name:'mixin', version:'0.8.5'
     implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
+
+    compileOnly group:'com.google.auto.service', name:'auto-service', version:'1.0.1'
+    annotationProcessor group:'com.google.auto.service', name:'auto-service', version:'1.0.1'
 }
+tasks.register('apiJar', Jar) {
+    archiveClassifier = "api"
+    dependsOn(compileApiJava)
+    dependsOn(processApiResources)
+    from sourceSets.api.output.classesDirs
+    from sourceSets.api.output.resourcesDir
+    filesMatching(['pack.mcmeta']) {
+        expand project.properties
+    }
+}
+
+artifacts {
+    api apiJar
+}
+
+build.dependsOn apiJar
 
 publishing {
     publications {

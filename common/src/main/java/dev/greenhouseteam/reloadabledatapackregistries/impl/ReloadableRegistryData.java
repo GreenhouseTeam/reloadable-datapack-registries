@@ -1,15 +1,14 @@
-package dev.greenhouseteam.reloadabledatapackregistries;
+package dev.greenhouseteam.reloadabledatapackregistries.impl;
 
+import dev.greenhouseteam.reloadabledatapackregistries.api.loader.CustomDataLoader;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.RegistryDataLoader;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
-// TODO: Document parts of this.
 public class ReloadableRegistryData<T> {
 
     private final RegistryDataLoader.RegistryData<T> registryData;

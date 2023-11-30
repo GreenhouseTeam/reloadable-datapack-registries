@@ -1,14 +1,17 @@
-package dev.greenhouseteam.reloadabledatapackregistries;
+package dev.greenhouseteam.reloadabledatapackregistries.impl;
 
+import com.google.auto.service.AutoService;
 import com.mojang.serialization.Codec;
-import dev.greenhouseteam.reloadabledatapackregistries.platform.services.IRDRPlatformHelper;
+import dev.greenhouseteam.reloadabledatapackregistries.api.IReloadableRegistryCreationHelper;
+import dev.greenhouseteam.reloadabledatapackregistries.api.loader.CustomDataLoader;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistrySynchronization;
 import net.minecraft.resources.RegistryDataLoader;
 import net.minecraft.resources.ResourceKey;
 
-public class ReloadableRegistryCreationHelper {
-    public static final ReloadableRegistryCreationHelper INSTANCE = new ReloadableRegistryCreationHelper();
+@AutoService(IReloadableRegistryCreationHelper.class)
+public class ReloadableRegistryCreationHelper implements IReloadableRegistryCreationHelper {
+    public static final IReloadableRegistryCreationHelper INSTANCE = new ReloadableRegistryCreationHelper();
 
     public <T> void setupReloadableRegistry(ResourceKey<Registry<T>> registryKey, Codec<T> codec) {
         setupReloadableRegistry(registryKey, codec, codec);

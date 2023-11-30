@@ -18,10 +18,10 @@
     "environment": "*",
     "entrypoints": {
         "main": [
-            "dev.greenhouseteam.reloadabledatapackregistries.ReloadableDatapackRegistriesFabric"
+            "dev.greenhouseteam.reloadabledatapackregistries.impl.ReloadableDatapackRegistriesFabric"
         ],
         "client": [
-            "dev.greenhouseteam.reloadabledatapackregistries.client.ReloadableDatapackRegistriesClientFabric"
+            "dev.greenhouseteam.reloadabledatapackregistries.impl.client.ReloadableDatapackRegistriesClientFabric"
         ]
     },
     "mixins": [

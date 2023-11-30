@@ -1,6 +1,6 @@
 package dev.greenhouseteam.reloadabledatapackregistries.network;
 
-import dev.greenhouseteam.reloadabledatapackregistries.ReloadableDatapackRegistries;
+import dev.greenhouseteam.reloadabledatapackregistries.impl.ReloadableDatapackRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.network.NetworkRegistry;
 import net.neoforged.neoforge.network.simple.SimpleChannel;

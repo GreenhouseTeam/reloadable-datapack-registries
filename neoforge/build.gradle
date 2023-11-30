@@ -13,8 +13,6 @@ sourceSets {
     testmod {
         compileClasspath += main.compileClasspath
         runtimeClasspath += main.runtimeClasspath
-        compileClasspath += project(":common").sourceSets.testmod.compileClasspath
-        runtimeClasspath += project(":common").sourceSets.testmod.runtimeClasspath
     }
 }
 // Automatically enable neoforge AccessTransformers if the file exists
@@ -26,17 +24,15 @@ if (file('src/main/resources/META-INF/accesstransformer.cfg').exists()) {
 runs {
     configureEach {
         modSource project.sourceSets.testmod
+        jvmArgument "-Dmixin.debug.export=true"
+        jvmArgument "-Dmixin.debug.verbose=true"
     }
     client {
         systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
-        jvmArgument "-Dmixin.debug.export=true"
-        jvmArgument "-Dmixin.debug.verbose=true"
     }
     server {
         systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
         programArgument '--nogui'
-        jvmArgument "-Dmixin.debug.export=true"
-        jvmArgument "-Dmixin.debug.verbose=true"
     }
 
     gameTestServer {
@@ -47,8 +43,6 @@ runs {
 
     data {
         programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
-        jvmArgument "-Dmixin.debug.export=true"
-        jvmArgument "-Dmixin.debug.verbose=true"
     }
 }
 
@@ -57,8 +51,10 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 dependencies {
     implementation "net.neoforged:neoforge:${neoforge_version}"
 
+    compileOnly project(path: ':common', configuration: 'api')
     compileOnly project(':common')
-    testmodCompileOnly project(":common").sourceSets.test.output
+    testmodImplementation project(":common").sourceSets.testmod.output
+    testmodImplementation sourceSets.main.output
 
     compileOnly group:'com.google.auto.service', name:'auto-service', version:'1.0.1'
     annotationProcessor group:'com.google.auto.service', name:'auto-service', version:'1.0.1'
@@ -79,10 +75,6 @@ tasks.named("sourcesJar", Jar) {
     from(project(":common").sourceSets.main.allSource)
 }
 
-tasks.named("compileTestJava", JavaCompile) {
-    source(project(":common").sourceSets.test.allSource)
-}
-
 tasks.withType(ProcessResources).matching(notNeoTask).configureEach {
     from project(":common").sourceSets.main.resources
 
@@ -91,8 +83,36 @@ tasks.withType(ProcessResources).matching(notNeoTask).configureEach {
     }
 }
 
-processTestResources {
-    from project(":common").sourceSets.test.resources
+// Whilst NeoForge doesn't allow for multi mod setups, we can do this
+// to add the main classes to the testmod source.
+compileTestmodJava {
+    source(project(":common").sourceSets.api.allSource)
+    source(project(":common").sourceSets.main.allSource)
+    source(project(":common").sourceSets.testmod.allSource)
+    source(sourceSets.main.allSource)
+}
+processTestmodResources {
+    from project(":common").sourceSets.testmod.resources
+}
+
+processTestmodResources {
+    def expandProps = [
+            "version": version,
+            "group": project.group, //Else we target the task's group.
+            "minecraft_version": minecraft_version,
+            "minecraft_version_range": minecraft_version_range,
+            "mod_name": mod_name,
+            "mod_id": mod_id,
+            "license": license,
+            "description": project.description,
+            "neoforge_version": neoforge_version,
+            "neoforge_loader_version_range": neoforge_loader_version_range
+    ]
+
+    filesMatching(['pack.mcmeta', 'META-INF/mods.toml', '*.mixins.json']) {
+        expand expandProps
+    }
+    inputs.properties(expandProps)
 }
 
 publishing {

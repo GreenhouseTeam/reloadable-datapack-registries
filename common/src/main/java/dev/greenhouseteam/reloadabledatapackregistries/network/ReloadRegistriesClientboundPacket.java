@@ -1,6 +1,6 @@
 package dev.greenhouseteam.reloadabledatapackregistries.network;
 
-import dev.greenhouseteam.reloadabledatapackregistries.ReloadableDatapackRegistries;
+import dev.greenhouseteam.reloadabledatapackregistries.impl.ReloadableDatapackRegistries;
 import dev.greenhouseteam.reloadabledatapackregistries.mixin.ClientPacketListenerAccessor;
 import io.netty.buffer.Unpooled;
 import net.minecraft.client.Minecraft;

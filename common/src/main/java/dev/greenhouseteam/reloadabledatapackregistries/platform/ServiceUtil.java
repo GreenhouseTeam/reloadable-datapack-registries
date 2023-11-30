@@ -1,6 +1,6 @@
 package dev.greenhouseteam.reloadabledatapackregistries.platform;
 
-import dev.greenhouseteam.reloadabledatapackregistries.ReloadableDatapackRegistries;
+import dev.greenhouseteam.reloadabledatapackregistries.impl.ReloadableDatapackRegistries;
 
 import java.util.ServiceLoader;
 

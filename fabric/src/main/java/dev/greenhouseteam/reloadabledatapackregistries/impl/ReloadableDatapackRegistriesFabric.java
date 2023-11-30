@@ -1,4 +1,4 @@
-package dev.greenhouseteam.reloadabledatapackregistries;
+package dev.greenhouseteam.reloadabledatapackregistries.impl;
 
 import net.fabricmc.api.ModInitializer;
 

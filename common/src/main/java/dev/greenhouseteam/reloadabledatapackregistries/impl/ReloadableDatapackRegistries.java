@@ -1,8 +1,7 @@
-package dev.greenhouseteam.reloadabledatapackregistries;
+package dev.greenhouseteam.reloadabledatapackregistries.impl;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableMultimap;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.Lifecycle;
@@ -19,14 +18,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-// TODO: Document all of this, potentially separate into API/Impl.
 public class ReloadableDatapackRegistries {
 
 	public static final String MOD_ID = "reloadabledatapackregistries";
@@ -62,14 +59,6 @@ public class ReloadableDatapackRegistries {
 		}
 
 		return ImmutableList.copyOf(RELOADABLE_REGISTRY_DATA.values().stream().sorted(ReloadableRegistryData::compareTo).map(ReloadableRegistryData::getRegistryData).toList());
-	}
-
-	public static List<RegistrySynchronization.NetworkedRegistryData<?>> getOrCreateAllNetworkData() {
-		if (!hasLoaded) {
-			throw new UnsupportedOperationException("Called ReloadableDatapackRegistries#getOrCreateAllNetworkData too early, please call it after registration.");
-		}
-
-		return ImmutableList.copyOf(NETWORKABLE_REGISTRIES.values().stream().sorted((o1, o2) -> RELOADABLE_REGISTRY_DATA.get(o1.key()).compareTo(RELOADABLE_REGISTRY_DATA.get(o2.key()))).toList());
 	}
 
 	protected static void addNetworkCodecToMap(ResourceKey<? extends Registry<?>> key, RegistrySynchronization.NetworkedRegistryData<?> data) {

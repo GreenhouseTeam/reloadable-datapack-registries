@@ -1,8 +1,8 @@
 package dev.greenhouseteam.reloadabledatapackregistries.platform;
 
 import com.google.auto.service.AutoService;
-import dev.greenhouseteam.reloadabledatapackregistries.ReloadableRegistryCreationHelper;
-import dev.greenhouseteam.reloadabledatapackregistries.ReloadableRegistryEntryPoint;
+import dev.greenhouseteam.reloadabledatapackregistries.api.entrypoint.ReloadableRegistryPlugin;
+import dev.greenhouseteam.reloadabledatapackregistries.impl.ReloadableRegistryCreationHelper;
 import dev.greenhouseteam.reloadabledatapackregistries.network.ReloadRegistriesClientboundPacket;
 import dev.greenhouseteam.reloadabledatapackregistries.platform.services.IRDRPlatformHelper;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
@@ -34,7 +34,7 @@ public class FabricRDRPlatformHelper implements IRDRPlatformHelper {
 
     @Override
     public void invokeEntrypoints() {
-        FabricLoader.getInstance().getEntrypoints("reloadable_datapack_registries", ReloadableRegistryEntryPoint.class).forEach(entryPoint -> entryPoint.createContents(ReloadableRegistryCreationHelper.INSTANCE));
+        FabricLoader.getInstance().getEntrypoints("reloadable_datapack_registries", ReloadableRegistryPlugin.class).forEach(entryPoint -> entryPoint.createContents(ReloadableRegistryCreationHelper.INSTANCE));
     }
 
     @Override
