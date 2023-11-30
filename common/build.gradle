@@ -57,6 +57,16 @@ artifacts {
 
 build.dependsOn apiJar
 
+tasks.withType(JavaCompile).configureEach {
+    source(sourceSets.api.allSource)
+}
+tasks.withType(Javadoc).configureEach {
+    source(sourceSets.api.allSource)
+}
+tasks.named("sourcesJar", Jar) {
+    from(sourceSets.api.allSource)
+}
+
 publishing {
     publications {
         mavenJava(MavenPublication) {

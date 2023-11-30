@@ -69,14 +69,17 @@ dependencies {
 Spec<Task> notNeoTask = { Task it -> !it.name.startsWith("neo") } as Spec<Task>
 
 tasks.withType(JavaCompile).matching(notNeoTask).configureEach {
+    source(project(":common").sourceSets.api.allSource)
     source(project(":common").sourceSets.main.allSource)
 }
 
 tasks.withType(Javadoc).matching(notNeoTask).configureEach {
+    source(project(":common").sourceSets.api.allJava)
     source(project(":common").sourceSets.main.allJava)
 }
 
 tasks.named("sourcesJar", Jar) {
+    from(project(":common").sourceSets.api.allSource)
     from(project(":common").sourceSets.main.allSource)
 }
 
