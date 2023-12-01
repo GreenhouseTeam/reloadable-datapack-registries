@@ -33,7 +33,7 @@ public class ReloadableRegistryEvent extends Event implements IReloadableRegistr
      * @param <T>
      */
     @Override
-    public <T> void registerReloadableRegistry(ResourceKey<Registry<T>> registryKey, Codec<T> codec, Codec<T> networKCodec) {
+    public <T> void registerNetworkableReloadableRegistry(ResourceKey<Registry<T>> registryKey, Codec<T> codec, Codec<T> networKCodec) {
         data.add(new Data<>(registryKey, codec, networKCodec));
     }
 
@@ -60,7 +60,7 @@ public class ReloadableRegistryEvent extends Event implements IReloadableRegistr
     }
 
     private <T> void handleData(Data<T> data, IReloadableRegistryCreationHelper helper) {
-        helper.registerReloadableRegistry(data.registryKey, data.reloadableRegistryData, data.networkableRegistryData);
+        helper.registerNetworkableReloadableRegistry(data.registryKey, data.reloadableRegistryData, data.networkableRegistryData);
 
         if (data.customDataLoader != null)
             helper.setCustomDataLoader(data.registryKey, data.customDataLoader);

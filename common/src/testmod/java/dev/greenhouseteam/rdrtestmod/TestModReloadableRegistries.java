@@ -41,9 +41,9 @@ public class TestModReloadableRegistries {
     public TestModReloadableRegistries() {}
 
     public static void createContents(IReloadableRegistryCreationHelper helper) {
-        helper.registerReloadableRegistry(BASIC_RECORD, BasicRecord.CODEC, BasicRecord.CODEC);
-        helper.registerReloadableRegistry(LOG_REGISTRY, LogRecord.CODEC);
-        helper.registerReloadableRegistry(CHOCOLATE_REGISTRY, Chocolate.DIRECT_CODEC, Chocolate.DIRECT_CODEC);
+        helper.fromExistingRegistry(BASIC_RECORD);
+        helper.fromExistingRegistry(LOG_REGISTRY);
+        helper.fromExistingRegistry(CHOCOLATE_REGISTRY);
 
         // Set the data loaders to log out the result after loading.
         helper.setCustomDataLoader(BASIC_RECORD, prioritisedDataLoader(BasicRecord.CODEC));

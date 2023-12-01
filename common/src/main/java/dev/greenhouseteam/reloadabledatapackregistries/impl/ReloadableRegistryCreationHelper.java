@@ -13,7 +13,7 @@ import net.minecraft.resources.ResourceKey;
 @AutoService(IReloadableRegistryCreationHelper.class)
 public class ReloadableRegistryCreationHelper implements IReloadableRegistryCreationHelper {
     @Override
-    public <T> void registerReloadableRegistry(ResourceKey<Registry<T>> registryKey, Codec<T> codec, Codec<T> networKCodec) {
+    public <T> void registerNetworkableReloadableRegistry(ResourceKey<Registry<T>> registryKey, Codec<T> codec, Codec<T> networKCodec) {
         ReloadableRegistryData<T> registryData = new ReloadableRegistryData<>(new RegistryDataLoader.RegistryData<>(registryKey, codec));
 
         ReloadableDatapackRegistries.RELOADABLE_REGISTRY_DATA.put(registryKey, registryData);

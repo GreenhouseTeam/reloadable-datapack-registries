@@ -17,9 +17,6 @@
     "icon": "assets/${mod_id}/icon.png",
     "environment": "*",
     "entrypoints": {
-        "main": [
-            "dev.greenhouseteam.reloadabledatapackregistries.impl.ReloadableDatapackRegistriesFabric"
-        ],
         "client": [
             "dev.greenhouseteam.reloadabledatapackregistries.impl.client.ReloadableDatapackRegistriesClientFabric"
         ]

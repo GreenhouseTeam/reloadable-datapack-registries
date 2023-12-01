@@ -2,3 +2,4 @@ accessWidener v1 named
 accessible class net/minecraft/resources/RegistryDataLoader$Loader
 accessible class net/minecraft/core/RegistrySynchronization$NetworkedRegistryData
 accessible method net/minecraft/core/RegistrySynchronization$NetworkedRegistryData <init> (Lnet/minecraft/resources/ResourceKey;Lcom/mojang/serialization/Codec;)V
+accessible field net/minecraft/core/RegistrySynchronization NETWORKABLE_REGISTRIES Ljava/util/Map;
