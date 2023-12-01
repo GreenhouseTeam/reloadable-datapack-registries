@@ -7,7 +7,7 @@ plugins {
     id 'java-library'
 }
 base {
-    archivesName = "${mod_id}-neoforge-${minecraft_version}"
+    archivesName = "${mod_id}-neoforge"
 }
 sourceSets {
     api {
