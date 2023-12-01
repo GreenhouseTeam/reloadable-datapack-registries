@@ -4,7 +4,6 @@ import com.google.auto.service.AutoService;
 import dev.greenhouseteam.reloadabledatapackregistries.api.entrypoint.ReloadableRegistryPlugin;
 import dev.greenhouseteam.reloadabledatapackregistries.impl.ReloadableRegistryCreationHelper;
 import dev.greenhouseteam.reloadabledatapackregistries.network.ReloadRegistriesClientboundPacket;
-import dev.greenhouseteam.reloadabledatapackregistries.platform.services.IRDRPlatformHelper;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.network.FriendlyByteBuf;

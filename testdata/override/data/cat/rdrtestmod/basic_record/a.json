@@ -1,4 +1,6 @@
 {
+  "priority": 10,
   "color": "yellow",
-  "entity_type": "minecraft:witch"
+  "entity_type": "minecraft:ocelot",
+  "favorite_chocolate": "rdrtestmod:milk_almond_chocolate"
 }

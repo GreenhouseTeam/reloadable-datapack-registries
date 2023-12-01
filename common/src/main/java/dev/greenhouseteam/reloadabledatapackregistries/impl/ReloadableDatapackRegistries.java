@@ -6,7 +6,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.Lifecycle;
 import com.mojang.serialization.codecs.UnboundedMapCodec;
-import dev.greenhouseteam.reloadabledatapackregistries.platform.services.IRDRPlatformHelper;
+import dev.greenhouseteam.reloadabledatapackregistries.platform.IRDRPlatformHelper;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.RegistryCodecs;
@@ -14,8 +14,6 @@ import net.minecraft.core.RegistrySynchronization;
 import net.minecraft.resources.RegistryDataLoader;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -27,10 +25,9 @@ import java.util.Optional;
 public class ReloadableDatapackRegistries {
 
 	public static final String MOD_ID = "reloadabledatapackregistries";
-	public static final String MOD_NAME = "Reloadable Datapack Registries";
-	public static final Logger LOG = LoggerFactory.getLogger(MOD_NAME);
 
 	protected static final Map<ResourceKey<? extends Registry<?>>, ReloadableRegistryData<?>> RELOADABLE_REGISTRY_DATA = Collections.synchronizedMap(new LinkedHashMap<>());
+
 	protected static final Map<ResourceKey<? extends Registry<?>>, RegistrySynchronization.NetworkedRegistryData<?>> NETWORKABLE_REGISTRIES = Collections.synchronizedMap(new LinkedHashMap<>());
 	private static boolean hasLoaded = false;
 
@@ -53,12 +50,12 @@ public class ReloadableDatapackRegistries {
 		return (ReloadableRegistryData<T>) RELOADABLE_REGISTRY_DATA.get(resourceKey);
 	}
 
-	public static List<RegistryDataLoader.RegistryData<?>> getOrCreateAllRegistryData() {
+	public static List<RegistryDataLoader.RegistryData<?>> getAllRegistryData() {
 		if (!hasLoaded) {
 			throw new UnsupportedOperationException("Called ReloadableDatapackRegistries#getOrCreateAllRegistryData too early, please call it after registration.");
 		}
 
-		return ImmutableList.copyOf(RELOADABLE_REGISTRY_DATA.values().stream().sorted(ReloadableRegistryData::compareTo).map(ReloadableRegistryData::getRegistryData).toList());
+		return ImmutableList.copyOf(RELOADABLE_REGISTRY_DATA.values().stream().map(ReloadableRegistryData::getRegistryData).toList());
 	}
 
 	protected static void addNetworkCodecToMap(ResourceKey<? extends Registry<?>> key, RegistrySynchronization.NetworkedRegistryData<?> data) {
@@ -87,6 +84,6 @@ public class ReloadableDatapackRegistries {
 	}
 
 	public static <E> DataResult<? extends Codec<E>> getNetworkCodec(ResourceKey<? extends Registry<E>> registryKey) {
-		return (DataResult)Optional.ofNullable(NETWORKABLE_REGISTRIES.get(registryKey)).map(($$0x) -> $$0x.networkCodec()).map(DataResult::success).orElseGet(() ->  DataResult.error(() -> "Unknown or not serializable registry: " + registryKey));
+		return (DataResult)Optional.ofNullable(NETWORKABLE_REGISTRIES.get(registryKey)).map((data) -> data.networkCodec()).map(DataResult::success).orElseGet(() ->  DataResult.error(() -> "Unknown or not serializable registry: " + registryKey));
 	}
 }

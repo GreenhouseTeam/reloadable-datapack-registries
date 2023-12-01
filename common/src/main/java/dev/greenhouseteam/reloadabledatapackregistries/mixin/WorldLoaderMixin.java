@@ -35,11 +35,11 @@ public class WorldLoaderMixin {
 
     @ModifyVariable(method = "load", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/core/LayeredRegistryAccess;replaceFrom(Ljava/lang/Object;[Lnet/minecraft/core/RegistryAccess$Frozen;)Lnet/minecraft/core/LayeredRegistryAccess;"), ordinal = 2)
     private static LayeredRegistryAccess<RegistryLayer> reloadabledatapackregistries$loadReloadableRegistries(LayeredRegistryAccess<RegistryLayer> original) {
-        if (ReloadableDatapackRegistries.getOrCreateAllRegistryData().isEmpty())
+        if (ReloadableDatapackRegistries.getAllRegistryData().isEmpty())
             return original;
 
         RegistryAccess.Frozen frozen = new RegistryAccess.ImmutableRegistryAccess(original.getLayer(RegistryLayer.RELOADABLE).registries().filter(registryEntry -> !ReloadableDatapackRegistries.isReloadableRegistry(registryEntry.key()))).freeze();
-        RegistryAccess.Frozen loadedFrozen = RegistryDataLoader.load(reloadabledatapackregistries$capturedCloseableResourceManager, frozen, ReloadableDatapackRegistries.getOrCreateAllRegistryData());
+        RegistryAccess.Frozen loadedFrozen = RegistryDataLoader.load(reloadabledatapackregistries$capturedCloseableResourceManager, frozen, ReloadableDatapackRegistries.getAllRegistryData());
         reloadabledatapackregistries$capturedLayeredRegistryAccess = original.replaceFrom(RegistryLayer.RELOADABLE, loadedFrozen);
         return reloadabledatapackregistries$capturedLayeredRegistryAccess;
     }

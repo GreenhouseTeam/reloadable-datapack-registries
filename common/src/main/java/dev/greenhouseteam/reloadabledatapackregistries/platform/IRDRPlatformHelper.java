@@ -1,12 +1,13 @@
-package dev.greenhouseteam.reloadabledatapackregistries.platform.services;
+package dev.greenhouseteam.reloadabledatapackregistries.platform;
 
+import dev.greenhouseteam.reloadabledatapackregistries.api.platform.ServiceUtil;
 import dev.greenhouseteam.reloadabledatapackregistries.network.ReloadRegistriesClientboundPacket;
-import dev.greenhouseteam.reloadabledatapackregistries.platform.ServiceUtil;
 import net.minecraft.server.level.ServerPlayer;
 
 import java.util.List;
 
 public interface IRDRPlatformHelper {
+
     IRDRPlatformHelper INSTANCE = ServiceUtil.load(IRDRPlatformHelper.class);
 
     /**

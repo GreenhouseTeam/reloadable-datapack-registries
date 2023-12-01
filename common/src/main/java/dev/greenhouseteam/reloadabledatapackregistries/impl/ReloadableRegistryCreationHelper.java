@@ -28,14 +28,6 @@ public class ReloadableRegistryCreationHelper implements IReloadableRegistryCrea
         }
     }
 
-    public <T> void before(ResourceKey<Registry<T>> resourceKey, ResourceKey<Registry<?>> otherRegistry) {
-        ReloadableDatapackRegistries.getReloadableRegistryData(resourceKey).before(otherRegistry);
-    }
-
-    public <T> void after(ResourceKey<Registry<T>> resourceKey, ResourceKey<Registry<?>> otherRegistry) {
-        ReloadableDatapackRegistries.getReloadableRegistryData(resourceKey).after(otherRegistry);
-    }
-
     public <T> void setCustomDataLoader(ResourceKey<Registry<T>> resourceKey, CustomDataLoader<T> customDataLoader) {
         ReloadableDatapackRegistries.getReloadableRegistryData(resourceKey).setCustomDataLoader(customDataLoader);
     }

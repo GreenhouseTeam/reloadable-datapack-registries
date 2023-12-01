@@ -1,4 +1,5 @@
 {
   "color": "red",
-  "entity_type": "minecraft:player"
+  "entity_type": "minecraft:witch",
+  "favorite_chocolate": "rdrtestmod:dark_pistachio_chocolate"
 }

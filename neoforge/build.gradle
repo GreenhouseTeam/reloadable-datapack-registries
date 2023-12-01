@@ -58,8 +58,8 @@ dependencies {
     testCompileOnly project(path: ':common', configuration: 'api')
     compileOnly project(':common')
     testCompileOnly project(':common')
-    testmodImplementation project(":common").sourceSets.testmod.output
-    testmodImplementation sourceSets.main.output
+    testmodCompileOnly project(":common").sourceSets.testmod.output
+    testmodCompileOnly sourceSets.main.output
 
     compileOnly group:'com.google.auto.service', name:'auto-service', version:'1.0.1'
     annotationProcessor group:'com.google.auto.service', name:'auto-service', version:'1.0.1'
@@ -101,6 +101,8 @@ compileTestmodJava {
 }
 processTestmodResources {
     from project(":common").sourceSets.testmod.resources
+    from sourceSets.main.resources
+    duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
 }
 
 processTestmodResources {

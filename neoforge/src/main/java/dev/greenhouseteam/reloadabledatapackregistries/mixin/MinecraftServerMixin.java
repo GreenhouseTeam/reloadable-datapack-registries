@@ -3,7 +3,7 @@ package dev.greenhouseteam.reloadabledatapackregistries.mixin;
 import com.google.common.collect.ImmutableList;
 import dev.greenhouseteam.reloadabledatapackregistries.impl.ReloadableDatapackRegistries;
 import dev.greenhouseteam.reloadabledatapackregistries.network.ReloadRegistriesClientboundPacket;
-import dev.greenhouseteam.reloadabledatapackregistries.platform.services.IRDRPlatformHelper;
+import dev.greenhouseteam.reloadabledatapackregistries.platform.IRDRPlatformHelper;
 import net.minecraft.core.LayeredRegistryAccess;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.RegistryDataLoader;
@@ -38,40 +38,38 @@ public abstract class MinecraftServerMixin {
     @Final @Shadow @Mutable
     private LayeredRegistryAccess<RegistryLayer> registries;
 
-    @Shadow public abstract ResourceManager getResourceManager();
-
     @Shadow public abstract PlayerList getPlayerList();
+
+
+    @ModifyVariable(method = "reloadResources", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/core/LayeredRegistryAccess;getAccessForLoading(Ljava/lang/Object;)Lnet/minecraft/core/RegistryAccess$Frozen;"))
+    private RegistryAccess.Frozen reloadabledatapackregistries$freezeWithReloadablesInMind(RegistryAccess.Frozen original) {
+        if (ReloadableDatapackRegistries.getAllRegistryData().isEmpty())
+            return original;
+
+        return this.registries().getAccessFrom(RegistryLayer.STATIC);
+    }
 
     @Inject(method = "lambda$reloadResources$26", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/packs/resources/MultiPackResourceManager;<init>(Lnet/minecraft/server/packs/PackType;Ljava/util/List;)V", shift = At.Shift.BY, by = 2), locals = LocalCapture.CAPTURE_FAILHARD, cancellable = true)
     private void reloadabledatapackregistries$reloadReloadableRegistries(RegistryAccess.Frozen unusedFrozen, ImmutableList immutableList, CallbackInfoReturnable<CompletionStage> cir, CloseableResourceManager resourceManager) {
-        if (!ReloadableDatapackRegistries.getOrCreateAllRegistryData().isEmpty()) {
+        if (!ReloadableDatapackRegistries.getAllRegistryData().isEmpty()) {
             RegistryAccess.Frozen previous = this.registries().getLayer(RegistryLayer.RELOADABLE);
             this.reloadabledatapackregistries$previousFrozenAccess = previous;
             try {
                 RegistryAccess.Frozen frozen = new RegistryAccess.ImmutableRegistryAccess(previous.registries().filter(registryEntry -> !ReloadableDatapackRegistries.isReloadableRegistry(registryEntry.key()))).freeze();
-                RegistryAccess.Frozen loadedFrozen = RegistryDataLoader.load(this.getResourceManager(), frozen, ReloadableDatapackRegistries.getOrCreateAllRegistryData());
+                RegistryAccess.Frozen loadedFrozen = RegistryDataLoader.load(resourceManager, frozen, ReloadableDatapackRegistries.getAllRegistryData());
                 this.registries = this.registries().replaceFrom(RegistryLayer.RELOADABLE, loadedFrozen);
-                if (ReloadableDatapackRegistries.hasNetworkableRegistries()) {
+                if (ReloadableDatapackRegistries.hasNetworkableRegistries())
                     IRDRPlatformHelper.INSTANCE.sendReloadPacket(new ReloadRegistriesClientboundPacket(new RegistryAccess.ImmutableRegistryAccess(loadedFrozen.registries().filter(registryEntry -> ReloadableDatapackRegistries.isNetworkable(registryEntry.key()))).freeze()), this.getPlayerList().getPlayers());
-                }
-            } catch (Exception ex) {
                 reloadabledatapackregistries$previousFrozenAccess = null;
+            } catch (Exception ex) {
                 cir.setReturnValue(CompletableFuture.failedFuture(ex));
             }
         }
     }
 
     @ModifyArg(method = "lambda$reloadResources$26", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/ReloadableServerResources;loadResources(Lnet/minecraft/server/packs/resources/ResourceManager;Lnet/minecraft/core/RegistryAccess$Frozen;Lnet/minecraft/world/flag/FeatureFlagSet;Lnet/minecraft/commands/Commands$CommandSelection;ILjava/util/concurrent/Executor;Ljava/util/concurrent/Executor;)Ljava/util/concurrent/CompletableFuture;"), index = 1)
-    private RegistryAccess.Frozen reloadabledatapackregistries$reloadReloadableRegistries(RegistryAccess.Frozen original) {
-        if (reloadabledatapackregistries$previousFrozenAccess == null)
-            return original;
-
-        return this.registries().getAccessFrom(RegistryLayer.STATIC);
-    }
-
-    @ModifyVariable(method = "reloadResources", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/core/LayeredRegistryAccess;getAccessForLoading(Ljava/lang/Object;)Lnet/minecraft/core/RegistryAccess$Frozen;"))
-    private RegistryAccess.Frozen reloadabledatapackregistries$freezeWithReloadablesInMind(RegistryAccess.Frozen original) {
-        if (reloadabledatapackregistries$previousFrozenAccess == null)
+    private RegistryAccess.Frozen reloadabledatapackregistries$reloadListenersWithNewFrozen(RegistryAccess.Frozen original) {
+        if (ReloadableDatapackRegistries.getAllRegistryData().isEmpty())
             return original;
 
         return this.registries().getAccessFrom(RegistryLayer.STATIC);
@@ -80,8 +78,8 @@ public abstract class MinecraftServerMixin {
     @Inject(method = "reloadResources", at = @At("RETURN"))
     private void reloadabledatapackregistries$keepOldDataUponFail(Collection<String> collection, CallbackInfoReturnable<CompletableFuture<Void>> cir) {
         if (reloadabledatapackregistries$previousFrozenAccess != null && cir.getReturnValue().isCompletedExceptionally()) {
-            this.registries().replaceFrom(RegistryLayer.RELOADABLE, reloadabledatapackregistries$previousFrozenAccess);
+            this.registries = this.registries().replaceFrom(RegistryLayer.RELOADABLE, reloadabledatapackregistries$previousFrozenAccess);
+            CompletableFuture.supplyAsync(() -> reloadabledatapackregistries$previousFrozenAccess = null);
         }
-        reloadabledatapackregistries$previousFrozenAccess = null;
     }
 }
