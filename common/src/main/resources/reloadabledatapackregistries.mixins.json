@@ -5,11 +5,13 @@
   "refmap": "${mod_id}.refmap.json",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "ClientPacketListenerAccessor",
+    "LayeredRegistryAccessAccessor",
     "RegistryDataLoaderRegistryDataMixin",
     "RegistrySynchronizationMixin",
-    "WorldLoaderMixin",
-    "WorldOpenFlowsMixin"
+    "WorldLoaderMixin"
+  ],
+  "client": [
+    "client.ClientPacketListenerAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

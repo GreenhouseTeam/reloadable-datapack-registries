@@ -1,4 +1,4 @@
-package dev.greenhouseteam.reloadabledatapackregistries.mixin;
+package dev.greenhouseteam.reloadabledatapackregistries.mixin.client;
 
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.core.RegistryAccess;
