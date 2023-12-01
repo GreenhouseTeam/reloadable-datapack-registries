@@ -1,6 +1,0 @@
-package dev.greenhouseteam.rdrtestmod;
-
-import dev.greenhouseteam.reloadabledatapackregistries.api.entrypoint.ReloadableRegistryEntrypoint;
-
-@ReloadableRegistryEntrypoint
-public class TestModReloadableRegistriesPluginNeoForge extends TestModReloadableRegistriesPlugin { }

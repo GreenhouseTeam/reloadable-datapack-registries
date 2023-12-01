@@ -13,13 +13,11 @@ import net.minecraft.commands.arguments.ResourceArgument;
 import net.minecraft.commands.arguments.ResourceOrTagArgument;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.entity.EntityType;
 
 import java.util.Locale;
 
-public class TestCommand {
+public class RDRTestCommand {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext context) {
         LiteralCommandNode<CommandSourceStack> testNode = Commands
                 .literal("rdr")
@@ -29,27 +27,27 @@ public class TestCommand {
 
         LiteralCommandNode<CommandSourceStack> compareBasicRecordNode = Commands
                 .literal("comparebasicrecord")
-                .then(Commands.argument("value", ResourceArgument.resource(context, TestModReloadableRegistriesPlugin.BASIC_RECORD))
-                        .then(Commands.argument("compareTo", ResourceOrTagArgument.resourceOrTag(context, TestModReloadableRegistriesPlugin.BASIC_RECORD))
-                                .executes(TestCommand::checkTags)))
+                .then(Commands.argument("value", ResourceArgument.resource(context, TestModReloadableRegistries.BASIC_RECORD))
+                        .then(Commands.argument("compareTo", ResourceOrTagArgument.resourceOrTag(context, TestModReloadableRegistries.BASIC_RECORD))
+                                .executes(RDRTestCommand::checkTags)))
                 .build();
 
         LiteralCommandNode<CommandSourceStack> colorNode = Commands
-                .literal("entitytype")
-                .then(Commands.argument("value", ResourceArgument.resource(context, TestModReloadableRegistriesPlugin.BASIC_RECORD))
-                        .executes(TestCommand::color))
+                .literal("color")
+                .then(Commands.argument("value", ResourceArgument.resource(context, TestModReloadableRegistries.BASIC_RECORD))
+                        .executes(RDRTestCommand::color))
                 .build();
 
         LiteralCommandNode<CommandSourceStack> entityTypeNode = Commands
                 .literal("entitytype")
-                .then(Commands.argument("value", ResourceArgument.resource(context, TestModReloadableRegistriesPlugin.BASIC_RECORD))
-                        .executes(TestCommand::entityType))
+                .then(Commands.argument("value", ResourceArgument.resource(context, TestModReloadableRegistries.BASIC_RECORD))
+                        .executes(RDRTestCommand::entityType))
                 .build();
 
         LiteralCommandNode<CommandSourceStack> favoriteChocolateNode = Commands
                 .literal("chocolate")
-                .then(Commands.argument("value", ResourceArgument.resource(context, TestModReloadableRegistriesPlugin.BASIC_RECORD))
-                        .executes(TestCommand::favoriteChocolate))
+                .then(Commands.argument("value", ResourceArgument.resource(context, TestModReloadableRegistries.BASIC_RECORD))
+                        .executes(RDRTestCommand::favoriteChocolate))
                 .build();
 
         dispatcher.getRoot().addChild(testNode);
@@ -60,8 +58,8 @@ public class TestCommand {
     }
 
     private static int checkTags(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
-        Holder.Reference<BasicRecord> value = ResourceArgument.getResource(context, "value", TestModReloadableRegistriesPlugin.BASIC_RECORD);
-        ResourceOrTagArgument.Result<BasicRecord> compareTo = ResourceOrTagArgument.getResourceOrTag(context, "compareTo", TestModReloadableRegistriesPlugin.BASIC_RECORD);
+        Holder.Reference<BasicRecord> value = ResourceArgument.getResource(context, "value", TestModReloadableRegistries.BASIC_RECORD);
+        ResourceOrTagArgument.Result<BasicRecord> compareTo = ResourceOrTagArgument.getResourceOrTag(context, "compareTo", TestModReloadableRegistries.BASIC_RECORD);
 
         HolderSet<BasicRecord> compareToHolderSet = compareTo.unwrap().map(HolderSet::direct, holders -> holders);
 
@@ -80,7 +78,7 @@ public class TestCommand {
     }
 
     private static int color(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
-        Holder.Reference<BasicRecord> value = ResourceArgument.getResource(context, "value", TestModReloadableRegistriesPlugin.BASIC_RECORD);
+        Holder.Reference<BasicRecord> value = ResourceArgument.getResource(context, "value", TestModReloadableRegistries.BASIC_RECORD);
 
         if (!value.isBound()) {
             context.getSource().sendFailure(Component.literal("Basic record value '" + value.key().location() + "' is not bound."));
@@ -93,7 +91,7 @@ public class TestCommand {
     }
 
     private static int entityType(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
-        Holder.Reference<BasicRecord> value = ResourceArgument.getResource(context, "value", TestModReloadableRegistriesPlugin.BASIC_RECORD);
+        Holder.Reference<BasicRecord> value = ResourceArgument.getResource(context, "value", TestModReloadableRegistries.BASIC_RECORD);
 
         if (!value.isBound()) {
             context.getSource().sendFailure(Component.literal("Basic record value '" + value.key().location() + "' is not bound."));
@@ -111,7 +109,7 @@ public class TestCommand {
     }
 
     private static int favoriteChocolate(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
-        Holder.Reference<BasicRecord> value = ResourceArgument.getResource(context, "value", TestModReloadableRegistriesPlugin.BASIC_RECORD);
+        Holder.Reference<BasicRecord> value = ResourceArgument.getResource(context, "value", TestModReloadableRegistries.BASIC_RECORD);
 
         if (!value.isBound()) {
             context.getSource().sendFailure(Component.literal("Basic record value '" + value.key().location() + "' is not bound."));

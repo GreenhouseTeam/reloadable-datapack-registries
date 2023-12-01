@@ -6,6 +6,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.Lifecycle;
 import com.mojang.serialization.codecs.UnboundedMapCodec;
+import dev.greenhouseteam.reloadabledatapackregistries.api.ReloadableRegistryData;
 import dev.greenhouseteam.reloadabledatapackregistries.platform.IRDRPlatformHelper;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
@@ -34,7 +35,6 @@ public class ReloadableDatapackRegistries {
 	public static void init() {
 		if (hasLoaded) return;
 		IRDRPlatformHelper.INSTANCE.invokeEntrypoints();
-		RegistrySynchronization.NETWORKABLE_REGISTRIES = ImmutableMap.copyOf(RegistrySynchronization.NETWORKABLE_REGISTRIES);
 		hasLoaded = true;
 	}
 
@@ -56,13 +56,6 @@ public class ReloadableDatapackRegistries {
 		}
 
 		return ImmutableList.copyOf(RELOADABLE_REGISTRY_DATA.values().stream().map(ReloadableRegistryData::getRegistryData).toList());
-	}
-
-	protected static void addNetworkCodecToMap(ResourceKey<? extends Registry<?>> key, RegistrySynchronization.NetworkedRegistryData<?> data) {
-		if (!(RegistrySynchronization.NETWORKABLE_REGISTRIES instanceof HashMap<ResourceKey<? extends Registry<?>>, RegistrySynchronization.NetworkedRegistryData<?>>)) {
-			RegistrySynchronization.NETWORKABLE_REGISTRIES = new HashMap<>(RegistrySynchronization.NETWORKABLE_REGISTRIES);
-		}
-		RegistrySynchronization.NETWORKABLE_REGISTRIES.put(key, data);
 	}
 
 	public static boolean isNetworkable(ResourceKey<? extends Registry<?>> key) {

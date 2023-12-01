@@ -2,7 +2,7 @@ package dev.greenhouseteam.rdrtestmod.record;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import dev.greenhouseteam.rdrtestmod.TestModReloadableRegistriesPlugin;
+import dev.greenhouseteam.rdrtestmod.TestModReloadableRegistries;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.RegistryFileCodec;
 import net.minecraft.util.ExtraCodecs;
@@ -16,7 +16,7 @@ public record Chocolate(ChocolateType chocolateType, Optional<NutType> nutType) 
             ExtraCodecs.catchDecoderException(Codec.STRING.xmap(NutType::byName, nutType -> nutType.name().toLowerCase(Locale.ROOT))).optionalFieldOf("nut_type").forGetter(Chocolate::nutType)
     ).apply(inst, Chocolate::new));
 
-    public static final Codec<Holder<Chocolate>> CODEC = RegistryFileCodec.create(TestModReloadableRegistriesPlugin.CHOCOLATE_REGISTRY, DIRECT_CODEC);
+    public static final Codec<Holder<Chocolate>> CODEC = RegistryFileCodec.create(TestModReloadableRegistries.CHOCOLATE_REGISTRY, DIRECT_CODEC);
 
     public enum ChocolateType {
         MILK,

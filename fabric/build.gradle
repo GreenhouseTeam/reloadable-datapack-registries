@@ -24,6 +24,8 @@ dependencies {
 
     implementation project(path: ':common', configuration: 'api')
     implementation project(":common")
+    testmodCompileOnly project(":common").sourceSets.testmod.output
+    testmodCompileOnly sourceSets.main.output
 
     compileOnly group:'com.google.auto.service', name:'auto-service', version:'1.0.1'
     testCompileOnly group:'com.google.auto.service', name:'auto-service', version:'1.0.1'

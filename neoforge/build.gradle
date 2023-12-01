@@ -10,8 +10,14 @@ base {
     archivesName = "${mod_id}-neoforge-${minecraft_version}"
 }
 sourceSets {
-    test {
-        compileClasspath += main.compileClasspath
+    api {
+        java
+        resources
+        compileClasspath += sourceSets.main.compileClasspath
+    }
+    main {
+        compileClasspath += sourceSets.api.output
+        runtimeClasspath += sourceSets.api.output
     }
     testmod {
         compileClasspath += main.compileClasspath
@@ -97,6 +103,7 @@ compileTestmodJava {
     source(project(":common").sourceSets.api.allSource)
     source(project(":common").sourceSets.main.allSource)
     source(project(":common").sourceSets.testmod.allSource)
+    source(sourceSets.api.allSource)
     source(sourceSets.main.allSource)
 }
 processTestmodResources {

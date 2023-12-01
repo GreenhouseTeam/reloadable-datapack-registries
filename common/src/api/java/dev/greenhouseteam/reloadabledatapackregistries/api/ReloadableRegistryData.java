@@ -1,4 +1,4 @@
-package dev.greenhouseteam.reloadabledatapackregistries.impl;
+package dev.greenhouseteam.reloadabledatapackregistries.api;
 
 import dev.greenhouseteam.reloadabledatapackregistries.api.loader.CustomDataLoader;
 import net.minecraft.core.Registry;

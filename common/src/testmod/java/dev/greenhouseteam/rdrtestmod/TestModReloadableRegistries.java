@@ -30,18 +30,20 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-public class TestModReloadableRegistriesPlugin implements ReloadableRegistryPlugin {
+public class TestModReloadableRegistries {
     public static final ResourceKey<Registry<BasicRecord>> BASIC_RECORD = ResourceKey.createRegistryKey(new ResourceLocation("rdrtestmod", "basic_record"));
     ;
     public static final ResourceKey<Registry<LogRecord>> LOG_REGISTRY = ResourceKey.createRegistryKey(new ResourceLocation("rdrtestmod", "log"));
     public static final ResourceKey<Registry<Chocolate>> CHOCOLATE_REGISTRY = ResourceKey.createRegistryKey(new ResourceLocation("rdrtestmod", "chocolate"));
 
     public static final Logger LOG = LoggerFactory.getLogger("RDR Test Mod");
-    @Override
-    public void createContents(IReloadableRegistryCreationHelper helper) {
-        helper.setupReloadableRegistry(BASIC_RECORD, BasicRecord.CODEC);
-        helper.setupReloadableRegistry(LOG_REGISTRY, LogRecord.CODEC, null);
-        helper.setupReloadableRegistry(CHOCOLATE_REGISTRY, Chocolate.DIRECT_CODEC);
+
+    public TestModReloadableRegistries() {}
+
+    public static void createContents(IReloadableRegistryCreationHelper helper) {
+        helper.registerReloadableRegistry(BASIC_RECORD, BasicRecord.CODEC, BasicRecord.CODEC);
+        helper.registerReloadableRegistry(LOG_REGISTRY, LogRecord.CODEC);
+        helper.registerReloadableRegistry(CHOCOLATE_REGISTRY, Chocolate.DIRECT_CODEC, Chocolate.DIRECT_CODEC);
 
         // Set the data loaders to log out the result after loading.
         helper.setCustomDataLoader(BASIC_RECORD, prioritisedDataLoader(BasicRecord.CODEC));
