@@ -14,6 +14,7 @@ import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceKey;
 import net.neoforged.neoforge.common.conditions.ConditionalOps;
 import net.neoforged.neoforge.common.conditions.ICondition;
+import net.neoforged.neoforge.registries.DataPackRegistriesHooks;
 
 import java.util.Map;
 import java.util.Optional;
@@ -22,7 +23,7 @@ import java.util.Optional;
 public class NeoRDPRApiPlatformHelper implements IRDPRApiPlatformHelper {
     @Override
     public <T> void fromExistingRegistry(IReloadableRegistryCreationHelper helper, ResourceKey<Registry<T>> registryKey) {
-        Optional<RegistryDataLoader.RegistryData<?>> optionalRegistryData = RegistryDataLoader.WORLDGEN_REGISTRIES.stream().filter(registryData -> registryData.key().location() == registryKey.location()).findFirst();
+        Optional<RegistryDataLoader.RegistryData<?>> optionalRegistryData = DataPackRegistriesHooks.getDataPackRegistries().stream().filter(registryData -> registryData.key().location() == registryKey.location()).findFirst();
         if (optionalRegistryData.isEmpty()) {
             throw new NullPointerException("Tried making " + registryKey + "' reloadable. Which is either not a datapack registry or has not been registered.");
         }

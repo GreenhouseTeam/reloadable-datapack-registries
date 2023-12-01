@@ -7,8 +7,7 @@
   "mixins": [
     "LayeredRegistryAccessAccessor",
     "RegistryDataLoaderRegistryDataMixin",
-    "RegistrySynchronizationMixin",
-    "WorldLoaderMixin"
+    "RegistrySynchronizationMixin"
   ],
   "client": [
     "client.ClientPacketListenerAccessor"
@@ -17,4 +16,3 @@
     "defaultRequire": 1
   }
 }
-
