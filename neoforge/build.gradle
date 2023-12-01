@@ -159,6 +159,10 @@ publishing {
         mavenJava(MavenPublication) {
             artifactId base.archivesName.get()
             from components.java
+            artifact(apiJar) {
+                builtBy apiJar
+                classifier 'api'
+            }
         }
     }
     repositories {
