@@ -20,7 +20,7 @@
         "main": [
             "dev.greenhouseteam.rdrtestmod.RDPRTestModFabric"
         ],
-        "reloadable_datapack_registries": [
+        "rdpr": [
           "dev.greenhouseteam.rdrtestmod.RDPRTestModEntrypoint"
         ]
     },

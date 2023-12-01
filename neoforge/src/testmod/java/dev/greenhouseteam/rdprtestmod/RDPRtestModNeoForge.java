@@ -1,28 +1,27 @@
-package dev.greenhouseteam.rdrtestmod;
+package dev.greenhouseteam.rdprtestmod;
 
-import dev.greenhouseteam.rdrtestmod.record.BasicRecord;
-import dev.greenhouseteam.rdrtestmod.record.Chocolate;
-import dev.greenhouseteam.rdrtestmod.record.LogRecord;
+import dev.greenhouseteam.rdprtestmod.record.BasicRecord;
+import dev.greenhouseteam.rdprtestmod.record.Chocolate;
+import dev.greenhouseteam.rdprtestmod.record.LogRecord;
 import dev.greenhouseteam.rdpr.api.ReloadableRegistryEvent;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.registries.DataPackRegistryEvent;
 
-@Mod("rdrtestmod")
-public class RDRTestModNeoForge {
-    public RDRTestModNeoForge() {
-    }
+@Mod("rdprtestmod")
+public class RDPRtestModNeoForge {
+    public RDPRtestModNeoForge() {}
 
-    @Mod.EventBusSubscriber(modid = "rdrtestmod", bus = Mod.EventBusSubscriber.Bus.FORGE)
+    @Mod.EventBusSubscriber(modid = "rdprtestmod", bus = Mod.EventBusSubscriber.Bus.FORGE)
     public static class ForgeEvents {
         @SubscribeEvent
         public static void registerCommands(RegisterCommandsEvent event) {
-            RDRTestCommand.register(event.getDispatcher(), event.getBuildContext());
+            RDPRCommand.register(event.getDispatcher(), event.getBuildContext());
         }
     }
 
-    @Mod.EventBusSubscriber(modid = "rdrtestmod", bus = Mod.EventBusSubscriber.Bus.MOD)
+    @Mod.EventBusSubscriber(modid = "rdprtestmod", bus = Mod.EventBusSubscriber.Bus.MOD)
     public static class ModEvents {
         @SubscribeEvent
         public static void createNewDataPackRegistries(DataPackRegistryEvent.NewRegistry event) {

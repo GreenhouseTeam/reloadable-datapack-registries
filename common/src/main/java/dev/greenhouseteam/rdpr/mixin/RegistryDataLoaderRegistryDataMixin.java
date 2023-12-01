@@ -25,25 +25,25 @@ public abstract class RegistryDataLoaderRegistryDataMixin<T> {
     @Shadow public abstract ResourceKey<? extends Registry<T>> key();
 
     @Unique
-    private Map<ResourceKey<T>, Exception> reloadabledatapackregistries$capturedExceptionMap;
+    private Map<ResourceKey<T>, Exception> rdpr$capturedExceptionMap;
     @Unique
-    private WritableRegistry<T> reloadabledatapackregistries$writeableRegistry;
+    private WritableRegistry<T> rdpr$writeableRegistry;
 
     @Inject(method = "create", at = @At(value = "INVOKE", target = "Lcom/mojang/datafixers/util/Pair;of(Ljava/lang/Object;Ljava/lang/Object;)Lcom/mojang/datafixers/util/Pair;", shift = At.Shift.BEFORE), locals = LocalCapture.CAPTURE_FAILHARD)
-    private void reloadabledatapackregistries$captureExceptionMap(Lifecycle lifecycle, Map<ResourceKey<T>, Exception> exceptionMap, CallbackInfoReturnable<Pair<WritableRegistry<T>, RegistryDataLoader.Loader>> cir, WritableRegistry<T> writableRegistry) {
-        this.reloadabledatapackregistries$capturedExceptionMap = exceptionMap;
-        this.reloadabledatapackregistries$writeableRegistry = writableRegistry;
+    private void rdpr$captureExceptionMap(Lifecycle lifecycle, Map<ResourceKey<T>, Exception> exceptionMap, CallbackInfoReturnable<Pair<WritableRegistry<T>, RegistryDataLoader.Loader>> cir, WritableRegistry<T> writableRegistry) {
+        this.rdpr$capturedExceptionMap = exceptionMap;
+        this.rdpr$writeableRegistry = writableRegistry;
     }
 
     @ModifyArg(method = "create", at = @At(value = "INVOKE", target = "Lcom/mojang/datafixers/util/Pair;of(Ljava/lang/Object;Ljava/lang/Object;)Lcom/mojang/datafixers/util/Pair;"), index = 1)
-    private Object reloadabledatapackregistries$createData(Object original) {
+    private Object rdpr$createData(Object original) {
         if (ReloadableDatapackRegistries.isReloadableRegistry(this.key())) {
             ReloadableRegistryData<?> reloadableRegistryData = ReloadableDatapackRegistries.getReloadableRegistryData(this.key());
             if (reloadableRegistryData.getDataLoader().isPresent()) {
                 return (RegistryDataLoader.Loader) (resourceManager, registryInfoLookup) -> {
-                    ReloadableDatapackRegistries.getReloadableRegistryData(this.key()).getDataLoader().get().load(registryInfoLookup, resourceManager, reloadabledatapackregistries$writeableRegistry, reloadabledatapackregistries$capturedExceptionMap);
-                    reloadabledatapackregistries$capturedExceptionMap = null;
-                    reloadabledatapackregistries$writeableRegistry = null;
+                    ReloadableDatapackRegistries.getReloadableRegistryData(this.key()).getDataLoader().get().load(registryInfoLookup, resourceManager, rdpr$writeableRegistry, rdpr$capturedExceptionMap);
+                    rdpr$capturedExceptionMap = null;
+                    rdpr$writeableRegistry = null;
                 };
             }
         }

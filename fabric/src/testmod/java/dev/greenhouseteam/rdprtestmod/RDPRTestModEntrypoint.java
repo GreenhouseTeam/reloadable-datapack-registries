@@ -1,4 +1,4 @@
-package dev.greenhouseteam.rdrtestmod;
+package dev.greenhouseteam.rdprtestmod;
 
 import dev.greenhouseteam.rdpr.api.IReloadableRegistryCreationHelper;
 import dev.greenhouseteam.rdpr.api.entrypoint.ReloadableRegistryPlugin;

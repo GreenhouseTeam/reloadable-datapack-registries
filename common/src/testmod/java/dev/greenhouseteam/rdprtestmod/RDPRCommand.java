@@ -1,11 +1,11 @@
-package dev.greenhouseteam.rdrtestmod;
+package dev.greenhouseteam.rdprtestmod;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.LiteralCommandNode;
-import dev.greenhouseteam.rdrtestmod.record.BasicRecord;
-import dev.greenhouseteam.rdrtestmod.record.Chocolate;
+import dev.greenhouseteam.rdprtestmod.record.BasicRecord;
+import dev.greenhouseteam.rdprtestmod.record.Chocolate;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -17,10 +17,10 @@ import net.minecraft.network.chat.Component;
 
 import java.util.Locale;
 
-public class RDRTestCommand {
+public class RDPRCommand {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext context) {
         LiteralCommandNode<CommandSourceStack> testNode = Commands
-                .literal("rdr")
+                .literal("rdpr")
                 .requires(c -> c.hasPermission(2))
                 .build();
 
@@ -29,25 +29,25 @@ public class RDRTestCommand {
                 .literal("comparebasicrecord")
                 .then(Commands.argument("value", ResourceArgument.resource(context, TestModReloadableRegistries.BASIC_RECORD))
                         .then(Commands.argument("compareTo", ResourceOrTagArgument.resourceOrTag(context, TestModReloadableRegistries.BASIC_RECORD))
-                                .executes(RDRTestCommand::checkTags)))
+                                .executes(RDPRCommand::checkTags)))
                 .build();
 
         LiteralCommandNode<CommandSourceStack> colorNode = Commands
                 .literal("color")
                 .then(Commands.argument("value", ResourceArgument.resource(context, TestModReloadableRegistries.BASIC_RECORD))
-                        .executes(RDRTestCommand::color))
+                        .executes(RDPRCommand::color))
                 .build();
 
         LiteralCommandNode<CommandSourceStack> entityTypeNode = Commands
                 .literal("entitytype")
                 .then(Commands.argument("value", ResourceArgument.resource(context, TestModReloadableRegistries.BASIC_RECORD))
-                        .executes(RDRTestCommand::entityType))
+                        .executes(RDPRCommand::entityType))
                 .build();
 
         LiteralCommandNode<CommandSourceStack> favoriteChocolateNode = Commands
                 .literal("chocolate")
                 .then(Commands.argument("value", ResourceArgument.resource(context, TestModReloadableRegistries.BASIC_RECORD))
-                        .executes(RDRTestCommand::favoriteChocolate))
+                        .executes(RDPRCommand::favoriteChocolate))
                 .build();
 
         dispatcher.getRoot().addChild(testNode);

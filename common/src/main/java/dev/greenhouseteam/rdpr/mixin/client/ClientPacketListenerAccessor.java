@@ -9,5 +9,5 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 @Mixin(ClientPacketListener.class)
 public interface ClientPacketListenerAccessor {
     @Accessor("registryAccess") @Mutable
-    void reloadabledatapackregistries$setRegistryAccess(RegistryAccess.Frozen value);
+    void rdpr$setRegistryAccess(RegistryAccess.Frozen value);
 }

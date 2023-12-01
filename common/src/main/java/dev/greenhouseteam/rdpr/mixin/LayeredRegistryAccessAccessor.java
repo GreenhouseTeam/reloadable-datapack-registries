@@ -17,19 +17,19 @@ import java.util.stream.Stream;
 @Mixin(LayeredRegistryAccess.class)
 public interface LayeredRegistryAccessAccessor<T> {
     @Accessor("keys")
-    List<T> reloadabledatapackregistries$getKeys();
+    List<T> rdpr$getKeys();
 
     @Accessor("values")
-    List<RegistryAccess.Frozen> reloadabledatapackregistries$getValues();
+    List<RegistryAccess.Frozen> rdpr$getValues();
 
     @Accessor("values") @Mutable @Final
-    void reloadabledatapackregistries$setValues(List<RegistryAccess.Frozen> value);
+    void rdpr$setValues(List<RegistryAccess.Frozen> value);
 
     @Accessor("composite") @Mutable @Final
-    void reloadabledatapackregistries$setComposite(RegistryAccess.Frozen value);
+    void rdpr$setComposite(RegistryAccess.Frozen value);
 
     @Invoker("collectRegistries")
-    static Map<ResourceKey<? extends Registry<?>>, Registry<?>> reloadabledatapackregistries$invokeCollectRegistries(Stream<? extends RegistryAccess> $$0) {
+    static Map<ResourceKey<? extends Registry<?>>, Registry<?>> rdpr$invokeCollectRegistries(Stream<? extends RegistryAccess> $$0) {
         throw new RuntimeException("");
     }
 }

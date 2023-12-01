@@ -1,8 +1,8 @@
-package dev.greenhouseteam.rdrtestmod.record;
+package dev.greenhouseteam.rdprtestmod.record;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import dev.greenhouseteam.rdrtestmod.TestModReloadableRegistries;
+import dev.greenhouseteam.rdprtestmod.TestModReloadableRegistries;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.RegistryFileCodec;
 import net.minecraft.util.ExtraCodecs;

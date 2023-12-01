@@ -1,4 +1,4 @@
-package dev.greenhouseteam.rdrtestmod.record;
+package dev.greenhouseteam.rdprtestmod.record;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;

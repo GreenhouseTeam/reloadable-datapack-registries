@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @AutoService(IRDPRApiPlatformHelper.class)
-public class FabricRDRApiPlatformHelper implements IRDPRApiPlatformHelper {
+public class FabricRDPRApiPlatformHelper implements IRDPRApiPlatformHelper {
     @Override
     public <T> void fromExistingRegistry(IReloadableRegistryCreationHelper helper, ResourceKey<Registry<T>> registryKey) {
         Optional<RegistryDataLoader.RegistryData<?>> optionalRegistryData = DynamicRegistries.getDynamicRegistries().stream().filter(registryData -> registryData.key().location() == registryKey.location()).findFirst();

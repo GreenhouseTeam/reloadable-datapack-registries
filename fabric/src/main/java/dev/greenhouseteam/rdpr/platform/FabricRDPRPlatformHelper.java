@@ -12,7 +12,7 @@ import net.minecraft.server.level.ServerPlayer;
 import java.util.List;
 
 @AutoService(IRDPRPlatformHelper.class)
-public class FabricRDRPlatformHelper implements IRDPRPlatformHelper {
+public class FabricRDPRPlatformHelper implements IRDPRPlatformHelper {
 
     @Override
     public String getPlatformName() {
@@ -33,7 +33,7 @@ public class FabricRDRPlatformHelper implements IRDPRPlatformHelper {
 
     @Override
     public void invokeEntrypoints() {
-        FabricLoader.getInstance().getEntrypoints("reloadable_datapack_registries", ReloadableRegistryPlugin.class).forEach(entryPoint -> entryPoint.createContents(ReloadableRegistryCreationHelper.INSTANCE));
+        FabricLoader.getInstance().getEntrypoints("rdpr", ReloadableRegistryPlugin.class).forEach(entryPoint -> entryPoint.createContents(ReloadableRegistryCreationHelper.INSTANCE));
     }
 
     @Override

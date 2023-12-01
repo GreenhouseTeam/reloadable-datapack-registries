@@ -9,7 +9,7 @@ import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 @Mod(ReloadableDatapackRegistries.MOD_ID)
 public class ReloadableDatapackRegistriesNeo {
 
-    public ReloadableDatapackRegistriesNeo(IEventBus bus) {}
+    public ReloadableDatapackRegistriesNeo() {}
 
     @Mod.EventBusSubscriber(modid = ReloadableDatapackRegistries.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
     private static class ForgeEvents {

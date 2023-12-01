@@ -1,4 +1,4 @@
-package dev.greenhouseteam.rdrtestmod;
+package dev.greenhouseteam.rdprtestmod;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
@@ -9,10 +9,10 @@ import com.mojang.serialization.Decoder;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.Lifecycle;
 import dev.greenhouseteam.rdpr.api.platform.IRDPRApiPlatformHelper;
-import dev.greenhouseteam.rdrtestmod.record.BasicRecord;
-import dev.greenhouseteam.rdrtestmod.record.Chocolate;
-import dev.greenhouseteam.rdrtestmod.record.LogRecord;
-import dev.greenhouseteam.rdrtestmod.record.PrioritizedRecord;
+import dev.greenhouseteam.rdprtestmod.record.BasicRecord;
+import dev.greenhouseteam.rdprtestmod.record.Chocolate;
+import dev.greenhouseteam.rdprtestmod.record.LogRecord;
+import dev.greenhouseteam.rdprtestmod.record.PrioritizedRecord;
 import dev.greenhouseteam.rdpr.api.IReloadableRegistryCreationHelper;
 import dev.greenhouseteam.rdpr.api.loader.CustomDataLoader;
 import net.minecraft.core.Registry;
@@ -30,10 +30,10 @@ import java.util.Map;
 import java.util.Optional;
 
 public class TestModReloadableRegistries {
-    public static final ResourceKey<Registry<BasicRecord>> BASIC_RECORD = ResourceKey.createRegistryKey(new ResourceLocation("rdrtestmod", "basic_record"));
+    public static final ResourceKey<Registry<BasicRecord>> BASIC_RECORD = ResourceKey.createRegistryKey(new ResourceLocation("rdprtestmod", "basic_record"));
     ;
-    public static final ResourceKey<Registry<LogRecord>> LOG_REGISTRY = ResourceKey.createRegistryKey(new ResourceLocation("rdrtestmod", "log"));
-    public static final ResourceKey<Registry<Chocolate>> CHOCOLATE_REGISTRY = ResourceKey.createRegistryKey(new ResourceLocation("rdrtestmod", "chocolate"));
+    public static final ResourceKey<Registry<LogRecord>> LOG_REGISTRY = ResourceKey.createRegistryKey(new ResourceLocation("rdprtestmod", "log"));
+    public static final ResourceKey<Registry<Chocolate>> CHOCOLATE_REGISTRY = ResourceKey.createRegistryKey(new ResourceLocation("rdprtestmod", "chocolate"));
 
     public static final Logger LOG = LoggerFactory.getLogger("RDR Test Mod");
 

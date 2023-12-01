@@ -7,8 +7,8 @@ issueTrackerURL="https://github.com/GreenhouseTeam/reloadable-datapack-registrie
 modId = "${mod_id}"
 version = "${version}"
 displayName = "${mod_name}"
-displayURL="https://github.com/GreenhouseTeam/reloadable-datapack-registries"
-logoFile="${mod_id}.png"
+displayURL = "https://github.com/GreenhouseTeam/reloadable-datapack-registries"
+logoFile = "${mod_id}.png"
 authors = "Greenhouse Team, MerchantPug"
 description = '''${description}'''
 
@@ -32,29 +32,29 @@ ordering = "NONE"
 side = "BOTH"
 
 [[mods]]
-modId = "rdrtestmod"
+modId = "rdprtestmod"
 version = "${version}"
-displayName = "Reloadable Datapack Registries Testmod"
-displayURL="https://github.com/GreenhouseTeam/reloadable-datapack-registries"
+displayName = "Reloadable Data Pack Registries Testmod"
+displayURL = "https://github.com/GreenhouseTeam/reloadable-datapack-registries"
 logoFile="${mod_id}.png"
 authors = "MerchantPug"
 description = '''Reloadable Datapack Registries Testmod'''
 
-[[dependencies.rdrtestmod]]
+[[dependencies.rdprtestmod]]
 modId = "neoforge"
 mandatory = true
 versionRange = "${neoforge_loader_version_range}"
 ordering = "NONE"
 side = "BOTH"
 
-[[dependencies.rdrtestmod]]
+[[dependencies.rdprtestmod]]
 modId = "minecraft"
 mandatory = true
 versionRange = "${minecraft_version_range}"
 ordering = "NONE"
 side = "BOTH"
 
-[[dependencies.rdrtestmod]]
+[[dependencies.rdprtestmod]]
 modId = "${mod_id}"
 mandatory = true
 versionRange = "[1.0.0,)"

@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class RegistrySynchronizationMixin {
 
     @Inject(method = "getNetworkCodec", at = @At("RETURN"), cancellable = true)
-    private static <E> void reloadabledatapackregistries$getReloadableNetworkCodec(ResourceKey<? extends Registry<E>> registryKey, CallbackInfoReturnable<DataResult<? extends Codec<E>>> cir) {
+    private static <E> void rdpr$getReloadableNetworkCodec(ResourceKey<? extends Registry<E>> registryKey, CallbackInfoReturnable<DataResult<? extends Codec<E>>> cir) {
         if (ReloadableDatapackRegistries.isNetworkable(registryKey))
             cir.setReturnValue(ReloadableDatapackRegistries.getNetworkCodec(registryKey));
     }

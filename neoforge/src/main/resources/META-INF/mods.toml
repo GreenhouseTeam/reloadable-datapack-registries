@@ -7,8 +7,8 @@ issueTrackerURL="https://github.com/GreenhouseTeam/reloadable-datapack-registrie
 modId = "${mod_id}"
 version = "${version}"
 displayName = "${mod_name}"
-displayURL="https://github.com/GreenhouseTeam/reloadable-datapack-registries"
-logoFile="${mod_id}.png"
+displayURL = "https://github.com/GreenhouseTeam/reloadable-datapack-registries"
+logoFile = "${mod_id}.png"
 authors = "Greenhouse Team, MerchantPug"
 description = '''${description}'''
 

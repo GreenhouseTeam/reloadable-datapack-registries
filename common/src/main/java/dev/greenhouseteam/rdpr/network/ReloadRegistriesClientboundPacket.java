@@ -46,7 +46,7 @@ public record ReloadRegistriesClientboundPacket(RegistryAccess.Frozen registryHo
             RegistryAccess.Frozen frozen = new RegistryAccess.ImmutableRegistryAccess(clientPacketListener.registryAccess().registries().filter(registryEntry -> !ReloadableDatapackRegistries.isNetworkable(registryEntry.key()))).freeze();
             RegistryAccess.ImmutableRegistryAccess newRegistryAccess = new RegistryAccess.ImmutableRegistryAccess(Stream.concat(frozen.registries(), registryHolder().registries()));
             if (clientPacketListener.getConnection().getPacketListener() == null) return;
-            ((ClientPacketListenerAccessor)clientPacketListener).reloadabledatapackregistries$setRegistryAccess(newRegistryAccess.freeze());
+            ((ClientPacketListenerAccessor)clientPacketListener).rdpr$setRegistryAccess(newRegistryAccess.freeze());
         });
     }
 
