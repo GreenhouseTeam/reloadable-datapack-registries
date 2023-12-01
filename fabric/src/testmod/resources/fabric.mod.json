@@ -1,6 +1,6 @@
 {
     "schemaVersion": 1,
-    "id": "rdrtestmod",
+    "id": "rdprtestmod",
     "version": "1.0.0",
     "name": "Reloadable Datapack Registries Testmod",
     "description": "Reloadable Datapack Registries Testmod",
@@ -14,14 +14,14 @@
         "issues": "https://github.com/GreenhouseTeam/reloadable-datapack-registries/issues"
     },
     "license": "MIT",
-    "icon": "assets/rdrtestmod/icon.png",
+    "icon": "assets/rdprtestmod/icon.png",
     "environment": "*",
     "entrypoints": {
         "main": [
-            "dev.greenhouseteam.rdrtestmod.RDPRTestModFabric"
+            "dev.greenhouseteam.rdprtestmod.RDPRTestModFabric"
         ],
         "rdpr": [
-          "dev.greenhouseteam.rdrtestmod.RDPRTestModEntrypoint"
+            "dev.greenhouseteam.rdprtestmod.RDPRTestModEntrypoint"
         ]
     },
     "depends": {
