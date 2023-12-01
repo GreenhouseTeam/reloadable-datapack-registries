@@ -14,7 +14,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import java.util.List;
 
 @AutoService(IRDPRPlatformHelper.class)
-public class NeoRDRPlatformHelper implements IRDPRPlatformHelper {
+public class NeoRDPRPlatformHelper implements IRDPRPlatformHelper {
 
     @Override
     public String getPlatformName() {

@@ -16,7 +16,6 @@ public class ReloadableDatapackRegistriesNeo {
         @SubscribeEvent
         public static void commonSetup(FMLCommonSetupEvent event) {
             ReloadableDatapackRegistriesNetworkHandler.init();
-            ReloadableDatapackRegistries.init();
         }
     }
 }

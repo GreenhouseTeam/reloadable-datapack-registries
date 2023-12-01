@@ -19,7 +19,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @AutoService(IRDPRApiPlatformHelper.class)
-public class NeoRDRApiPlatformHelper implements IRDPRApiPlatformHelper {
+public class NeoRDPRApiPlatformHelper implements IRDPRApiPlatformHelper {
     @Override
     public <T> void fromExistingRegistry(IReloadableRegistryCreationHelper helper, ResourceKey<Registry<T>> registryKey) {
         Optional<RegistryDataLoader.RegistryData<?>> optionalRegistryData = RegistryDataLoader.WORLDGEN_REGISTRIES.stream().filter(registryData -> registryData.key().location() == registryKey.location()).findFirst();

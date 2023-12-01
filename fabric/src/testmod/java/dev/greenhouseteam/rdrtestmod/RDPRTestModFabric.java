@@ -7,7 +7,7 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.registry.DynamicRegistries;
 
-public class RDRTestModFabric implements ModInitializer {
+public class RDPRTestModFabric implements ModInitializer {
     
     @Override
     public void onInitialize() {

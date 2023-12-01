@@ -18,10 +18,10 @@
     "environment": "*",
     "entrypoints": {
         "main": [
-            "dev.greenhouseteam.rdrtestmod.RDRTestModFabric"
+            "dev.greenhouseteam.rdrtestmod.RDPRTestModFabric"
         ],
         "reloadable_datapack_registries": [
-            "dev.greenhouseteam.rdrtestmod.RDRTestModEntrypoint"
+          "dev.greenhouseteam.rdrtestmod.RDPRTestModEntrypoint"
         ]
     },
     "depends": {
