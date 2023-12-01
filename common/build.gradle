@@ -40,6 +40,7 @@ dependencies {
     compileOnly group:'com.google.auto.service', name:'auto-service', version:'1.0.1'
     annotationProcessor group:'com.google.auto.service', name:'auto-service', version:'1.0.1'
 }
+
 tasks.register('apiJar', Jar) {
     archiveClassifier = "api"
     dependsOn(compileApiJava)
@@ -72,6 +73,10 @@ publishing {
         mavenJava(MavenPublication) {
             artifactId base.archivesName.get()
             from components.java
+            artifact(apiJar) {
+                builtBy apiJar
+                classifier 'api'
+            }
         }
     }
     repositories {

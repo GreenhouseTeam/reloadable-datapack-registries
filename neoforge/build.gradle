@@ -98,6 +98,10 @@ tasks.withType(ProcessResources).matching(notNeoTask).configureEach {
     }
 }
 
+compileApiJava {
+    source(project(":common").sourceSets.api.allSource)
+}
+
 // Whilst NeoForge doesn't allow for multi mod setups, we can do this
 // to add the main classes to the testmod source.
 compileTestmodJava {
@@ -112,6 +116,23 @@ processTestmodResources {
     from sourceSets.main.resources
     duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
 }
+
+tasks.register('apiJar', Jar) {
+    archiveClassifier = "api"
+    dependsOn(compileApiJava)
+    dependsOn(processApiResources)
+    from sourceSets.api.output.classesDirs
+    from sourceSets.api.output.resourcesDir
+    filesMatching(['pack.mcmeta']) {
+        expand project.properties
+    }
+}
+
+artifacts {
+    api apiJar
+}
+
+build.dependsOn apiJar
 
 processTestmodResources {
     def expandProps = [

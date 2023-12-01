@@ -3,7 +3,7 @@ package dev.greenhouseteam.rdrtestmod;
 import dev.greenhouseteam.rdrtestmod.record.BasicRecord;
 import dev.greenhouseteam.rdrtestmod.record.Chocolate;
 import dev.greenhouseteam.rdrtestmod.record.LogRecord;
-import dev.greenhouseteam.reloadabledatapackregistries.api.ReloadableRegistryEvent;
+import dev.greenhouseteam.rdpr.api.ReloadableRegistryEvent;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;

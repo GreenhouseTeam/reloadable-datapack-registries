@@ -1,7 +1,7 @@
 package dev.greenhouseteam.rdrtestmod;
 
-import dev.greenhouseteam.reloadabledatapackregistries.api.IReloadableRegistryCreationHelper;
-import dev.greenhouseteam.reloadabledatapackregistries.api.entrypoint.ReloadableRegistryPlugin;
+import dev.greenhouseteam.rdpr.api.IReloadableRegistryCreationHelper;
+import dev.greenhouseteam.rdpr.api.entrypoint.ReloadableRegistryPlugin;
 
 public class RDRTestModEntrypoint implements ReloadableRegistryPlugin {
     @Override

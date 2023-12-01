@@ -8,14 +8,13 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.Decoder;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.Lifecycle;
+import dev.greenhouseteam.rdpr.api.platform.IRDPRApiPlatformHelper;
 import dev.greenhouseteam.rdrtestmod.record.BasicRecord;
 import dev.greenhouseteam.rdrtestmod.record.Chocolate;
 import dev.greenhouseteam.rdrtestmod.record.LogRecord;
 import dev.greenhouseteam.rdrtestmod.record.PrioritizedRecord;
-import dev.greenhouseteam.reloadabledatapackregistries.api.IReloadableRegistryCreationHelper;
-import dev.greenhouseteam.reloadabledatapackregistries.api.entrypoint.ReloadableRegistryPlugin;
-import dev.greenhouseteam.reloadabledatapackregistries.api.loader.CustomDataLoader;
-import dev.greenhouseteam.reloadabledatapackregistries.api.platform.IRDRApiPlatformHelper;
+import dev.greenhouseteam.rdpr.api.IReloadableRegistryCreationHelper;
+import dev.greenhouseteam.rdpr.api.loader.CustomDataLoader;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.FileToIdConverter;
 import net.minecraft.resources.RegistryOps;
@@ -56,8 +55,8 @@ public class TestModReloadableRegistries {
         return (lookup, resourceManager, registry, exceptionMap) -> {
             Map<ResourceLocation, Integer> priorityList = new HashMap<>();
             FileToIdConverter fileToIdConverter = FileToIdConverter.json(registry.key().location().getNamespace() + "/" + registry.key().location().getPath());
-            RegistryOps<JsonElement> ops = IRDRApiPlatformHelper.INSTANCE.getRegistryOps(lookup);
-            Decoder<Optional<PrioritizedRecord<T>>> decoder = IRDRApiPlatformHelper.INSTANCE.getDecoder(PrioritizedRecord.createCodec(codec));
+            RegistryOps<JsonElement> ops = IRDPRApiPlatformHelper.INSTANCE.getRegistryOps(lookup);
+            Decoder<Optional<PrioritizedRecord<T>>> decoder = IRDPRApiPlatformHelper.INSTANCE.getDecoder(PrioritizedRecord.createCodec(codec));
 
             for (Map.Entry<ResourceLocation, Resource> entry : fileToIdConverter.listMatchingResources(resourceManager).entrySet()) {
                 Resource resource = entry.getValue();

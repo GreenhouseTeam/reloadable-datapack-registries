@@ -18,7 +18,7 @@
     "environment": "*",
     "entrypoints": {
         "client": [
-            "dev.greenhouseteam.reloadabledatapackregistries.impl.client.ReloadableDatapackRegistriesClientFabric"
+            "dev.greenhouseteam.rdpr.impl.client.ReloadableDatapackRegistriesClientFabric"
         ]
     },
     "mixins": [

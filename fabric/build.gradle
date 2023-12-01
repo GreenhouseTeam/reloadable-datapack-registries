@@ -8,6 +8,15 @@ base {
     archivesName = "${mod_id}-fabric"
 }
 sourceSets {
+    api {
+        java
+        resources
+        compileClasspath += sourceSets.main.compileClasspath
+    }
+    main {
+        compileClasspath += sourceSets.api.output
+        runtimeClasspath += sourceSets.api.output
+    }
     testmod {
         compileClasspath += main.compileClasspath
         runtimeClasspath += main.runtimeClasspath
@@ -77,6 +86,10 @@ processResources {
     from project(":common").sourceSets.main.resources
 }
 
+compileApiJava {
+    source(project(":common").sourceSets.api.allSource)
+}
+
 compileTestmodJava {
     source(project(":common").sourceSets.api.allSource)
     source(project(":common").sourceSets.main.allSource)
@@ -89,11 +102,32 @@ processTestmodResources {
     duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
 }
 
+tasks.register('apiJar', Jar) {
+    archiveClassifier = "api"
+    dependsOn(compileApiJava)
+    dependsOn(processApiResources)
+    from sourceSets.api.output.classesDirs
+    from sourceSets.api.output.resourcesDir
+    filesMatching(['pack.mcmeta']) {
+        expand project.properties
+    }
+}
+
+artifacts {
+    api apiJar
+}
+
+build.dependsOn apiJar
+
 publishing {
     publications {
         mavenJava(MavenPublication) {
             artifactId base.archivesName.get()
             from components.java
+            artifact(apiJar) {
+                builtBy apiJar
+                classifier 'api'
+            }
         }
     }
     repositories {
