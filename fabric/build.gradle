@@ -23,7 +23,9 @@ sourceSets {
     }
 }
 repositories {
-    mavenLocal()
+    maven {
+        url 'https://maven.merchantpug.net/releases/'
+    }
 }
 dependencies {
     minecraft "com.mojang:minecraft:${minecraft_version}"
