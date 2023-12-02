@@ -36,7 +36,6 @@ modId = "rdprtestmod"
 version = "${version}"
 displayName = "Reloadable Data Pack Registries Testmod"
 displayURL = "https://github.com/GreenhouseTeam/reloadable-datapack-registries"
-logoFile="${mod_id}.png"
 authors = "MerchantPug"
 description = '''Reloadable Datapack Registries Testmod'''
 
