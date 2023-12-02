@@ -1,4 +1,4 @@
-package dev.greenhouseteam.rdpr.network;
+package dev.greenhouseteam.rdpr.impl.network;
 
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;

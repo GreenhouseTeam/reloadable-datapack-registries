@@ -3,13 +3,14 @@ package dev.greenhouseteam.rdpr.mixin;
 import com.google.common.collect.ImmutableList;
 import dev.greenhouseteam.rdpr.impl.ReloadableDatapackRegistries;
 import dev.greenhouseteam.rdpr.impl.util.LayeredRegistryAccessUtil;
-import dev.greenhouseteam.rdpr.network.ReloadRegistriesClientboundPacket;
-import dev.greenhouseteam.rdpr.platform.IRDPRPlatformHelper;
+import dev.greenhouseteam.rdpr.impl.network.ReloadRegistriesClientboundPacket;
+import dev.greenhouseteam.rdpr.impl.platform.IRDPRPlatformHelper;
 import net.minecraft.core.LayeredRegistryAccess;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.RegistryDataLoader;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.RegistryLayer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.packs.resources.CloseableResourceManager;
 import net.minecraft.server.players.PlayerList;
 import org.jetbrains.annotations.Nullable;
@@ -19,6 +20,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
@@ -36,6 +38,10 @@ public abstract class MinecraftServerMixin {
 
     @Shadow public abstract PlayerList getPlayerList();
 
+    @Shadow public abstract Iterable<ServerLevel> getAllLevels();
+
+    @Shadow public abstract RegistryAccess.Frozen registryAccess();
+
     @Inject(method = "method_29437", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/packs/resources/MultiPackResourceManager;<init>(Lnet/minecraft/server/packs/PackType;Ljava/util/List;)V", shift = At.Shift.BY, by = 2), locals = LocalCapture.CAPTURE_FAILHARD, cancellable = true)
     private void rdpr$reloadReloadableRegistries(RegistryAccess.Frozen unusedFrozen, ImmutableList immutableList, CallbackInfoReturnable<CompletionStage> cir, CloseableResourceManager resourceManager) {
         if (!ReloadableDatapackRegistries.getAllRegistryData().isEmpty()) {
@@ -44,6 +50,7 @@ public abstract class MinecraftServerMixin {
             try {
                 RegistryAccess.Frozen loadedFrozen = RegistryDataLoader.load(resourceManager, this.registries().getAccessForLoading(RegistryLayer.RELOADABLE), ReloadableDatapackRegistries.getAllRegistryData());
                 LayeredRegistryAccessUtil.replaceSpecificLayer(this.registries(), RegistryLayer.WORLDGEN, new RegistryAccess.ImmutableRegistryAccess(Stream.concat(previous.registries().filter(registryEntry -> !ReloadableDatapackRegistries.isReloadableRegistry(registryEntry.key())), loadedFrozen.registries())).freeze());
+                this.getAllLevels().forEach(serverLevel -> ((LevelAccessor)serverLevel).rdpr$setRegistryAccess(this.registryAccess()));
                 if (ReloadableDatapackRegistries.hasNetworkableRegistries())
                     IRDPRPlatformHelper.INSTANCE.sendReloadPacket(new ReloadRegistriesClientboundPacket(loadedFrozen), this.getPlayerList().getPlayers());
                 rdpr$previousFrozenAccess = null;
@@ -69,4 +76,11 @@ public abstract class MinecraftServerMixin {
         }
         CompletableFuture.supplyAsync(() -> rdpr$previousFrozenAccess = null);
     }
+
+    @Inject(method = "method_29440", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/ReloadableServerResources;updateRegistryTags(Lnet/minecraft/core/RegistryAccess;)V"))
+    private void rdpr$reloadRegistriesAsync(Collection collection, MinecraftServer.ReloadableResources reloadableResources, CallbackInfo ci) {
+        this.getAllLevels().forEach(serverLevel -> ((LevelAccessor)serverLevel).rdpr$setRegistryAccess(this.registryAccess()));
+        ((PlayerListAccessor)this.getPlayerList()).rdpr$setRegisties(this.registries());
+    }
+
 }

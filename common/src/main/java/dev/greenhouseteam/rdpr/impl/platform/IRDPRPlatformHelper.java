@@ -1,7 +1,7 @@
-package dev.greenhouseteam.rdpr.platform;
+package dev.greenhouseteam.rdpr.impl.platform;
 
 import dev.greenhouseteam.rdpr.api.platform.ServiceUtil;
-import dev.greenhouseteam.rdpr.network.ReloadRegistriesClientboundPacket;
+import dev.greenhouseteam.rdpr.impl.network.ReloadRegistriesClientboundPacket;
 import net.minecraft.server.level.ServerPlayer;
 
 import java.util.List;

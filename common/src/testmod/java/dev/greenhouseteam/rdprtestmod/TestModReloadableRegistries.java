@@ -40,6 +40,7 @@ public class TestModReloadableRegistries {
     public TestModReloadableRegistries() {}
 
     public static void createContents(IReloadableRegistryCreationHelper helper) {
+        // Register existing registries created in platform specific code as reloadable.
         helper.fromExistingRegistry(BASIC_RECORD);
         helper.fromExistingRegistry(LOG_REGISTRY);
         helper.fromExistingRegistry(CHOCOLATE_REGISTRY);

@@ -1,10 +1,10 @@
-package dev.greenhouseteam.rdpr.platform;
+package dev.greenhouseteam.rdpr.impl.platform;
 
 import com.google.auto.service.AutoService;
 import dev.greenhouseteam.rdpr.api.IReloadableRegistryCreationHelper;
 import dev.greenhouseteam.rdpr.api.ReloadableRegistryEvent;
-import dev.greenhouseteam.rdpr.network.ReloadRegistriesClientboundPacket;
-import dev.greenhouseteam.rdpr.network.ReloadableDatapackRegistriesNetworkHandler;
+import dev.greenhouseteam.rdpr.impl.network.ReloadRegistriesClientboundPacket;
+import dev.greenhouseteam.rdpr.impl.network.ReloadableDatapackRegistriesNetworkHandler;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.ModLoader;

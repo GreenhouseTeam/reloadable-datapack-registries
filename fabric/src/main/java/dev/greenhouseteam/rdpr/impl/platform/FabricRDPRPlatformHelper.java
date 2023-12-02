@@ -1,9 +1,9 @@
-package dev.greenhouseteam.rdpr.platform;
+package dev.greenhouseteam.rdpr.impl.platform;
 
 import com.google.auto.service.AutoService;
 import dev.greenhouseteam.rdpr.api.entrypoint.ReloadableRegistryPlugin;
 import dev.greenhouseteam.rdpr.impl.ReloadableRegistryCreationHelper;
-import dev.greenhouseteam.rdpr.network.ReloadRegistriesClientboundPacket;
+import dev.greenhouseteam.rdpr.impl.network.ReloadRegistriesClientboundPacket;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.network.FriendlyByteBuf;
@@ -43,4 +43,5 @@ public class FabricRDPRPlatformHelper implements IRDPRPlatformHelper {
             ServerPlayNetworking.send(player, packet.getFabricId(), buf);
         }
     }
+
 }

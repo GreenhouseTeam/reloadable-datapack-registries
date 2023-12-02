@@ -1,4 +1,4 @@
-package dev.greenhouseteam.rdpr.platform;
+package dev.greenhouseteam.rdpr.impl.platform;
 
 import com.google.auto.service.AutoService;
 import com.google.gson.JsonElement;
@@ -7,21 +7,23 @@ import com.mojang.serialization.Decoder;
 import com.mojang.serialization.JsonOps;
 import dev.greenhouseteam.rdpr.api.IReloadableRegistryCreationHelper;
 import dev.greenhouseteam.rdpr.api.platform.IRDPRApiPlatformHelper;
-import net.fabricmc.fabric.api.event.registry.DynamicRegistries;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistrySynchronization;
 import net.minecraft.resources.RegistryDataLoader;
 import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceKey;
+import net.neoforged.neoforge.common.conditions.ConditionalOps;
+import net.neoforged.neoforge.common.conditions.ICondition;
+import net.neoforged.neoforge.registries.DataPackRegistriesHooks;
 
 import java.util.Map;
 import java.util.Optional;
 
 @AutoService(IRDPRApiPlatformHelper.class)
-public class FabricRDPRApiPlatformHelper implements IRDPRApiPlatformHelper {
+public class NeoRDPRApiPlatformHelper implements IRDPRApiPlatformHelper {
     @Override
     public <T> void fromExistingRegistry(IReloadableRegistryCreationHelper helper, ResourceKey<Registry<T>> registryKey) {
-        Optional<RegistryDataLoader.RegistryData<?>> optionalRegistryData = DynamicRegistries.getDynamicRegistries().stream().filter(registryData -> registryData.key().location() == registryKey.location()).findFirst();
+        Optional<RegistryDataLoader.RegistryData<?>> optionalRegistryData = DataPackRegistriesHooks.getDataPackRegistries().stream().filter(registryData -> registryData.key().location() == registryKey.location()).findFirst();
         if (optionalRegistryData.isEmpty()) {
             throw new NullPointerException("Tried making " + registryKey + "' reloadable. Which is either not a datapack registry or has not been registered.");
         }
@@ -31,11 +33,11 @@ public class FabricRDPRApiPlatformHelper implements IRDPRApiPlatformHelper {
 
     @Override
     public RegistryOps<JsonElement> getRegistryOps(RegistryOps.RegistryInfoLookup lookup) {
-        return RegistryOps.create(JsonOps.INSTANCE, lookup);
+        return ConditionalOps.create(RegistryOps.create(JsonOps.INSTANCE, lookup), ICondition.IContext.TAGS_INVALID);
     }
 
     @Override
     public <T> Decoder<Optional<T>> getDecoder(Decoder<T> original) {
-        return original.map(Optional::of);
+        return ConditionalOps.createConditionalDecoder(original, "neoforge:conditions");
     }
 }

@@ -1,4 +1,4 @@
-package dev.greenhouseteam.rdpr.network;
+package dev.greenhouseteam.rdpr.impl.network;
 
 import dev.greenhouseteam.rdpr.impl.ReloadableDatapackRegistries;
 import net.minecraft.resources.ResourceLocation;
