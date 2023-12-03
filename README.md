@@ -105,7 +105,7 @@ public class NeoForgeExample {
         @SubscribeEvent
         public static void addReloadableRegistries(ReloadableRegistryEvent event) {
             // Generally you'll have your ResourceKeys elsewhere, just hook up the same resourcekey that you used to register your datapack.
-            helper.fromExistingRegistry(ExampleMod.BASIC_RECORD);
+                helper.fromExistingRegistry(ExampleModRegistryKeys.BASIC_RECORD);
         }
     }
 }
