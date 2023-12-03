@@ -3,7 +3,7 @@ package dev.greenhouseteam.rdpr.mixin;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Lifecycle;
 import dev.greenhouseteam.rdpr.impl.ReloadableDatapackRegistries;
-import dev.greenhouseteam.rdpr.api.ReloadableRegistryData;
+import dev.greenhouseteam.rdpr.impl.ReloadableRegistryData;
 import net.minecraft.core.Registry;
 import net.minecraft.core.WritableRegistry;
 import net.minecraft.resources.RegistryDataLoader;

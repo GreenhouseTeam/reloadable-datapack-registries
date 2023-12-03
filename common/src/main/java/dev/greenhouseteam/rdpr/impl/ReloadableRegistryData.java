@@ -1,4 +1,4 @@
-package dev.greenhouseteam.rdpr.api;
+package dev.greenhouseteam.rdpr.impl;
 
 import dev.greenhouseteam.rdpr.api.loader.CustomDataLoader;
 import net.minecraft.resources.RegistryDataLoader;

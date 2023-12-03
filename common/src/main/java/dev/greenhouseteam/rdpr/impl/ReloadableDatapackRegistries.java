@@ -6,7 +6,6 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.Lifecycle;
 import com.mojang.serialization.codecs.UnboundedMapCodec;
-import dev.greenhouseteam.rdpr.api.ReloadableRegistryData;
 import dev.greenhouseteam.rdpr.impl.platform.IRDPRPlatformHelper;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;

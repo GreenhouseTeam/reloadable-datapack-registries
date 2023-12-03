@@ -26,22 +26,36 @@ import java.util.Optional;
  */
 @FunctionalInterface
 public interface CustomDataLoader<T> {
+    /**
+     * A CustomDataLoader that returns nothing, use this when you want a
+     * data packable registry but are loading elsewhere.
+     */
     CustomDataLoader<?> NOTHING = (lookup, resourceManager, writableRegistry, resourceKeyExceptionMap) -> {};
 
+    /**
+     * .The load logic used in the registry instead of the default Minecraft logic.
+     *
+     * @param lookup            The lookup for getting values from the previous state of the registry.
+     * @param resourceManager   The resource manager asasociated wtih the current loading of JSON. This
+     *                          will let you load data from directories, etc.
+     * @param registry          The registry that is currently being loaded, usually used
+     *                          to register content.
+     * @param exceptionMap      The exception map to place any exceptions that should just be
+     *                          logged instead of throwing an exception.
+     */
     void load(RegistryOps.RegistryInfoLookup lookup, ResourceManager resourceManager, WritableRegistry<T> registry, Map<ResourceKey<T>, Exception> exceptionMap);
 
     /**
-     * Creates a custom loader which loads data from the namespace of the registry.
+     * Creates a custom loader which loads data from the associated {@link ResourceLocation} of the registry.
      * This is basically RegistryDataLoader#loadRegistryContents (Mojmap)/RegistryLoader#load (Yarn),
-     * but with an extra hook to place your own code.
+     * but with an extra hook to place your own code instead of the default register code.
      *
      * @param functionality A functional interface that can act upon the CustomDataLoader
      *                      values and also the returned value from this load.
      * @param codec         The codec used to load data for this registry.
-     * @param stage         Whether the functionality runs before or after registration.
      * @return A CustomDataLoader that loads from the namespace of the registry.
      */
-    static <T> CustomDataLoader<T> extraFunction(InnerFunctionality<T> functionality, Codec<T> codec, Stage stage) {
+    static <T> CustomDataLoader<T> loadFromRegistryId(InnerFunctionality<T> functionality, Codec<T> codec) {
         return (lookup, resourceManager, registry, exceptionMap) -> {
             FileToIdConverter fileToIdConverter = FileToIdConverter.json(registry.key().location().getNamespace() + "/" + registry.key().location().getPath());
             RegistryOps<JsonElement> ops = IRDPRApiPlatformHelper.INSTANCE.getRegistryOps(lookup);
@@ -54,11 +68,7 @@ public interface CustomDataLoader<T> {
                     JsonElement jsonelement = JsonParser.parseReader(reader);
                     DataResult<Optional<T>> dataResult = decoder.parse(ops, jsonelement);
                     Optional<T> t = dataResult.getOrThrow(false, s -> {});
-                    if (stage == Stage.BEFORE)
-                        functionality.load(lookup, resourceManager, registry, exceptionMap, resourceKey, t);
-                    t.ifPresentOrElse(e -> registry.register(resourceKey, e, Lifecycle.stable()), () -> LogUtils.getLogger().debug("Skipping loading registry entry {} as it's conditions were not met", resource));
-                    if (stage == Stage.AFTER)
-                           functionality.load(lookup, resourceManager, registry, exceptionMap, resourceKey, t);
+                    functionality.load(lookup, resourceManager, registry, exceptionMap, resourceKey, t);
                 } catch (Exception ex) {
                     exceptionMap.put(resourceKey, ex);
                 }
@@ -66,13 +76,22 @@ public interface CustomDataLoader<T> {
         };
     }
 
-    enum Stage {
-        BEFORE,
-        AFTER
-    }
-
     @FunctionalInterface
     interface InnerFunctionality<T> {
-        void load(RegistryOps.RegistryInfoLookup lookup, ResourceManager resourceManager, WritableRegistry<T> writableRegistry, Map<ResourceKey<T>, Exception> exceptionMap, ResourceKey<T> tResourceKey, Optional<T> t);
+        /**
+         * Load logic with extra parameters for loading after a value has been created.
+         *
+         * @param lookup            The lookup for getting values from the previous state of the registry.
+         * @param resourceManager   The resource manager asasociated wtih the current loading of JSON. This
+         *                          will let you load data from directories, etc.
+         * @param registry          The registry that is currently being loaded, usually used
+         *                          to register content.
+         * @param exceptionMap      The exception map to place any exceptions that should just be
+         *                          logged instead of throwing an exception.
+         * @param tResourceKey      The resource key of the value that would've been registered.
+         * @param t                 An optional value of the value that was created from the Codec that created it.
+         *                          Returns empty if NeoForge conditions return it as false.
+         */
+        void load(RegistryOps.RegistryInfoLookup lookup, ResourceManager resourceManager, WritableRegistry<T> registry, Map<ResourceKey<T>, Exception> exceptionMap, ResourceKey<T> tResourceKey, Optional<T> t);
     }
 }

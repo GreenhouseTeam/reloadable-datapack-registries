@@ -3,6 +3,7 @@ package dev.greenhouseteam.rdpr.impl.platform;
 import com.google.auto.service.AutoService;
 import dev.greenhouseteam.rdpr.api.IReloadableRegistryCreationHelper;
 import dev.greenhouseteam.rdpr.api.ReloadableRegistryEvent;
+import dev.greenhouseteam.rdpr.impl.ReloadableRegistryCreationHelper;
 import dev.greenhouseteam.rdpr.impl.network.ReloadRegistriesClientboundPacket;
 import dev.greenhouseteam.rdpr.impl.network.ReloadableDatapackRegistriesNetworkHandler;
 import net.minecraft.server.level.ServerPlayer;
@@ -38,7 +39,7 @@ public class NeoRDPRPlatformHelper implements IRDPRPlatformHelper {
     public void invokeEntrypoints() {
         ReloadableRegistryEvent reloadableRegistryEvent = new ReloadableRegistryEvent();
         ModLoader.get().postEvent(reloadableRegistryEvent);
-        reloadableRegistryEvent.post(IReloadableRegistryCreationHelper.INSTANCE);
+        reloadableRegistryEvent.post(ReloadableRegistryCreationHelper.INSTANCE);
     }
 
     @Override
