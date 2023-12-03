@@ -38,7 +38,7 @@ public class ReloadableRegistryEvent extends Event implements IReloadableRegistr
      * @param <T>           The type of the registry.
      */
     @Override
-    public <T> void registerNetworkableReloadableRegistry(ResourceKey<? extends Registry<T>> registryKey, Codec<T> codec, Codec<T> networkCodec) {
+    public <T> void registerNetworkableReloadableRegistry(ResourceKey<Registry<T>> registryKey, Codec<T> codec, Codec<T> networkCodec) {
         data.add(new Data<>(registryKey, codec, networkCodec));
     }
 
@@ -52,7 +52,7 @@ public class ReloadableRegistryEvent extends Event implements IReloadableRegistr
      * @see                     CustomDataLoader#load(RegistryOps.RegistryInfoLookup, ResourceManager, WritableRegistry, Codec, Map)
      */
     @Override
-    public <T> void setCustomDataLoader(ResourceKey<? extends Registry<T>> registryKey, CustomDataLoader<T> customDataLoader) {
+    public <T> void setCustomDataLoader(ResourceKey<Registry<T>> registryKey, CustomDataLoader<T> customDataLoader) {
         Optional<Data<?>> optional = data.stream().filter(data1 -> data1.registryKey.location() == registryKey.location()).findFirst();
         if (optional.isEmpty())
             throw new NullPointerException("Could not find registry key " + registryKey + " inside ReloadableRegistryEvent. Please register the registry key first.");
@@ -75,11 +75,11 @@ public class ReloadableRegistryEvent extends Event implements IReloadableRegistr
     }
 
     private static class Data<T> {
-        private final ResourceKey<? extends Registry<T>> registryKey;
+        private final ResourceKey<Registry<T>> registryKey;
         private final Codec<T> reloadableRegistryData;
         private final Codec<T> networkableRegistryData;
         private CustomDataLoader<T> customDataLoader;
-        protected Data(ResourceKey<? extends Registry<T>> registryKey, Codec<T> reloadableRegistryData, Codec<T> networkableRegistryData) {
+        protected Data(ResourceKey<Registry<T>> registryKey, Codec<T> reloadableRegistryData, Codec<T> networkableRegistryData) {
             this.registryKey = registryKey;
             this.reloadableRegistryData = reloadableRegistryData;
             this.networkableRegistryData = networkableRegistryData;

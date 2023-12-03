@@ -13,7 +13,7 @@ public interface IRDPRApiPlatformHelper {
 
     IRDPRApiPlatformHelper INSTANCE = ServiceUtil.load(IRDPRApiPlatformHelper.class);
 
-    <T> void fromExistingRegistry(IReloadableRegistryCreationHelper helper, ResourceKey<? extends Registry<T>> registryKey);
+    <T> void fromExistingRegistry(IReloadableRegistryCreationHelper helper, ResourceKey<Registry<T>> registryKey);
 
     RegistryOps<JsonElement> getRegistryOps(RegistryOps.RegistryInfoLookup lookup);
 

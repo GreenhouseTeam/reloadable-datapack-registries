@@ -22,7 +22,7 @@ import java.util.Optional;
 @AutoService(IRDPRApiPlatformHelper.class)
 public class NeoRDPRApiPlatformHelper implements IRDPRApiPlatformHelper {
     @Override
-    public <T> void fromExistingRegistry(IReloadableRegistryCreationHelper helper, ResourceKey<? extends Registry<T>> registryKey) {
+    public <T> void fromExistingRegistry(IReloadableRegistryCreationHelper helper, ResourceKey<Registry<T>> registryKey) {
         Optional<RegistryDataLoader.RegistryData<?>> optionalRegistryData = DataPackRegistriesHooks.getDataPackRegistries().stream().filter(registryData -> registryData.key().location() == registryKey.location()).findFirst();
         if (optionalRegistryData.isEmpty()) {
             throw new NullPointerException("Tried making " + registryKey + "' reloadable. Which is either not a datapack registry or has not been registered.");
