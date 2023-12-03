@@ -1,4 +1,4 @@
-![https://github.com/GreenhouseTeam/reloadable-datapack-registries/blob/1.20.2/neoforge/src/main/resources/rdpr.png]
+![](https://github.com/GreenhouseTeam/reloadable-datapack-registries/blob/1.20.2/neoforge/src/main/resources/rdpr.png)
 # Reloadable Data Pack Registries (RDPR)
 
 Reloadable Data Pack Registries is a library that allows modders to let their datapack/dynamic registries to reload with use of the /reload command.
