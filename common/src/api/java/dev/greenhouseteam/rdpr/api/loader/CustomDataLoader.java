@@ -30,7 +30,7 @@ public interface CustomDataLoader<T> {
      * A CustomDataLoader that returns nothing, use this when you want a
      * data packable registry but are loading elsewhere.
      */
-    CustomDataLoader<?> NOTHING = (lookup, resourceManager, writableRegistry, resourceKeyExceptionMap) -> {};
+    CustomDataLoader<?> NOTHING = (lookup, resourceManager, writableRegistry, codec, resourceKeyExceptionMap) -> {};
 
     /**
      * .The load logic used in the registry instead of the default Minecraft logic.
@@ -40,10 +40,11 @@ public interface CustomDataLoader<T> {
      *                          will let you load data from directories, etc.
      * @param registry          The registry that is currently being loaded, usually used
      *                          to register content.
+     * @param codec             The codec used for loading data for this registry.
      * @param exceptionMap      The exception map to place any exceptions that should just be
      *                          logged instead of throwing an exception.
      */
-    void load(RegistryOps.RegistryInfoLookup lookup, ResourceManager resourceManager, WritableRegistry<T> registry, Map<ResourceKey<T>, Exception> exceptionMap);
+    void load(RegistryOps.RegistryInfoLookup lookup, ResourceManager resourceManager, WritableRegistry<T> registry, Codec<T> codec, Map<ResourceKey<T>, Exception> exceptionMap);
 
     /**
      * Creates a custom loader which loads data from the associated {@link ResourceLocation} of the registry.
@@ -52,11 +53,10 @@ public interface CustomDataLoader<T> {
      *
      * @param functionality A functional interface that can act upon the CustomDataLoader
      *                      values and also the returned value from this load.
-     * @param codec         The codec used to load data for this registry.
      * @return A CustomDataLoader that loads from the namespace of the registry.
      */
-    static <T> CustomDataLoader<T> loadFromRegistryId(InnerFunctionality<T> functionality, Codec<T> codec) {
-        return (lookup, resourceManager, registry, exceptionMap) -> {
+    static <T> CustomDataLoader<T> loadFromRegistryId(InnerFunctionality<T> functionality) {
+        return (lookup, resourceManager, registry, codec, exceptionMap) -> {
             FileToIdConverter fileToIdConverter = FileToIdConverter.json(registry.key().location().getNamespace() + "/" + registry.key().location().getPath());
             RegistryOps<JsonElement> ops = IRDPRApiPlatformHelper.INSTANCE.getRegistryOps(lookup);
             Decoder<Optional<T>> decoder = IRDPRApiPlatformHelper.INSTANCE.getDecoder(codec);

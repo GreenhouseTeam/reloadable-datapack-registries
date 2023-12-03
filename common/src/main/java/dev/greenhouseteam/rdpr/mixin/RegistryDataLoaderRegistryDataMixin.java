@@ -1,6 +1,7 @@
 package dev.greenhouseteam.rdpr.mixin;
 
 import com.mojang.datafixers.util.Pair;
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.Lifecycle;
 import dev.greenhouseteam.rdpr.impl.ReloadableDatapackRegistries;
 import dev.greenhouseteam.rdpr.impl.ReloadableRegistryData;
@@ -8,6 +9,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.WritableRegistry;
 import net.minecraft.resources.RegistryDataLoader;
 import net.minecraft.resources.ResourceKey;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -24,6 +26,7 @@ public abstract class RegistryDataLoaderRegistryDataMixin<T> {
 
     @Shadow public abstract ResourceKey<? extends Registry<T>> key();
 
+    @Shadow @Final private Codec<T> elementCodec;
     @Unique
     private Map<ResourceKey<T>, Exception> rdpr$capturedExceptionMap;
     @Unique
@@ -41,7 +44,7 @@ public abstract class RegistryDataLoaderRegistryDataMixin<T> {
             ReloadableRegistryData<?> reloadableRegistryData = ReloadableDatapackRegistries.getReloadableRegistryData(this.key());
             if (reloadableRegistryData.getDataLoader().isPresent()) {
                 return (RegistryDataLoader.Loader) (resourceManager, registryInfoLookup) -> {
-                    ReloadableDatapackRegistries.getReloadableRegistryData(this.key()).getDataLoader().get().load(registryInfoLookup, resourceManager, rdpr$writeableRegistry, rdpr$capturedExceptionMap);
+                    ReloadableDatapackRegistries.getReloadableRegistryData(this.key()).getDataLoader().get().load(registryInfoLookup, resourceManager, rdpr$writeableRegistry, this.elementCodec, rdpr$capturedExceptionMap);
                     rdpr$capturedExceptionMap = null;
                     rdpr$writeableRegistry = null;
                 };

@@ -2,15 +2,18 @@ package dev.greenhouseteam.rdpr.api;
 
 import com.mojang.serialization.Codec;
 import dev.greenhouseteam.rdpr.api.loader.CustomDataLoader;
-import dev.greenhouseteam.rdpr.api.platform.IRDPRApiPlatformHelper;
 import net.minecraft.core.Registry;
+import net.minecraft.core.WritableRegistry;
+import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.packs.resources.ResourceManager;
 import net.neoforged.bus.api.Event;
 import net.neoforged.fml.event.IModBusEvent;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 // TODO: Document this event.
@@ -26,12 +29,13 @@ public class ReloadableRegistryEvent extends Event implements IReloadableRegistr
     public ReloadableRegistryEvent() {}
 
     /**
+     * Makes a registry reloadable using the specified codec, and a specified network codec.
+     * This does not modify the registry when the world is loaded.
      *
-     *
-     * @param registryKey
-     * @param codec
-     * @param networKCodec
-     * @param <T>
+     * @param registryKey   The {@link ResourceKey} of the registry to make reloadable.
+     * @param codec         The codec to use for loading.
+     * @param networkCodec  The codec to use for loading over the network.
+     * @param <T>           The type of the registry.
      */
     @Override
     public <T> void registerNetworkableReloadableRegistry(ResourceKey<? extends Registry<T>> registryKey, Codec<T> codec, Codec<T> networkCodec) {
@@ -39,11 +43,13 @@ public class ReloadableRegistryEvent extends Event implements IReloadableRegistr
     }
 
     /**
+     * Sets a custom data laoder, which changes how the specific datapack registry is loaded.
      *
-     *
-     * @param registryKey
-     * @param customDataLoader
-     * @param <T>
+     * @param registryKey       The {@link ResourceKey} of the registry to make reloadable.
+     * @param customDataLoader  The {@link CustomDataLoader} that will run instead of the
+     *                          usual loading logic for this registry.
+     * @param <T>               The type of the registry.
+     * @see                     CustomDataLoader#load(RegistryOps.RegistryInfoLookup, ResourceManager, WritableRegistry, Codec, Map)
      */
     @Override
     public <T> void setCustomDataLoader(ResourceKey<? extends Registry<T>> registryKey, CustomDataLoader<T> customDataLoader) {
@@ -54,6 +60,7 @@ public class ReloadableRegistryEvent extends Event implements IReloadableRegistr
         ((Data<T>)optional.get()).setCustomDataLoader(customDataLoader);
     }
 
+    @ApiStatus.Internal
     public void post(IReloadableRegistryCreationHelper helper) {
         for (Data<?> d : data) {
             handleData(d, helper);

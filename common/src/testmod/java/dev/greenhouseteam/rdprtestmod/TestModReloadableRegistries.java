@@ -3,7 +3,6 @@ package dev.greenhouseteam.rdprtestmod;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.mojang.logging.LogUtils;
-import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.Decoder;
 import com.mojang.serialization.JsonOps;
@@ -31,7 +30,6 @@ import java.util.Optional;
 
 public class TestModReloadableRegistries {
     public static final ResourceKey<Registry<BasicRecord>> BASIC_RECORD = ResourceKey.createRegistryKey(new ResourceLocation("rdprtestmod", "basic_record"));
-    ;
     public static final ResourceKey<Registry<LogRecord>> LOG_REGISTRY = ResourceKey.createRegistryKey(new ResourceLocation("rdprtestmod", "log"));
     public static final ResourceKey<Registry<Chocolate>> CHOCOLATE_REGISTRY = ResourceKey.createRegistryKey(new ResourceLocation("rdprtestmod", "chocolate"));
 
@@ -46,14 +44,14 @@ public class TestModReloadableRegistries {
         helper.fromExistingRegistry(CHOCOLATE_REGISTRY);
 
         // Set the data loaders to log out the result after loading.
-        helper.setCustomDataLoader(BASIC_RECORD, prioritisedDataLoader(BasicRecord.CODEC));
+        helper.setCustomDataLoader(BASIC_RECORD, prioritisedDataLoader());
         // For the log registry, we don't want to actually register the result.
         // But instead, we log the value that was supposed to be registered.
         helper.setCustomDataLoader(LOG_REGISTRY, logCustomDataLoader());
     }
 
-    private static <T> CustomDataLoader<T> prioritisedDataLoader(Codec<T> codec) {
-        return (lookup, resourceManager, registry, exceptionMap) -> {
+    private static <T> CustomDataLoader<T> prioritisedDataLoader() {
+        return (lookup, resourceManager, registry, codec, exceptionMap) -> {
             Map<ResourceLocation, Integer> priorityList = new HashMap<>();
             FileToIdConverter fileToIdConverter = FileToIdConverter.json(registry.key().location().getNamespace() + "/" + registry.key().location().getPath());
             RegistryOps<JsonElement> ops = IRDPRApiPlatformHelper.INSTANCE.getRegistryOps(lookup);
@@ -82,7 +80,7 @@ public class TestModReloadableRegistries {
     }
 
     private static CustomDataLoader<LogRecord> logCustomDataLoader() {
-        return (lookup, resourceManager, registry, exceptionMap) -> {
+        return (lookup, resourceManager, registry, codec, exceptionMap) -> {
             FileToIdConverter fileToIdConverter = FileToIdConverter.json(LOG_REGISTRY.location().getNamespace() + "/" + LOG_REGISTRY.location().getPath());
             RegistryOps<JsonElement> ops = RegistryOps.create(JsonOps.INSTANCE, lookup);
             for (Map.Entry<ResourceLocation, Resource> entry : fileToIdConverter.listMatchingResources(resourceManager).entrySet()) {
@@ -90,7 +88,7 @@ public class TestModReloadableRegistries {
                 ResourceKey<LogRecord> resourceKey = ResourceKey.create(registry.key(), fileToIdConverter.fileToId(entry.getKey()));
                 try (Reader reader = resource.openAsReader()) {
                     JsonElement jsonelement = JsonParser.parseReader(reader);
-                    DataResult<LogRecord> dataResult = LogRecord.CODEC.parse(ops, jsonelement);
+                    DataResult<LogRecord> dataResult = codec.parse(ops, jsonelement);
                     LogRecord logRecord = dataResult.getOrThrow(false, s -> {});
                     LOG.info("\033[30;107m" + resourceKey.location() + " has been loaded. --- It's extra message is {}.\033[39;49m", logRecord.extraLogMessage().orElse("... they forgot to put something here..."));
                 } catch (Exception ex) {
