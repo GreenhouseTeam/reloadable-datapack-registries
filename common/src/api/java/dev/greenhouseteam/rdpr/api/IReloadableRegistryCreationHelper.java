@@ -18,7 +18,7 @@ public interface IReloadableRegistryCreationHelper {
      * @param registryKey   The {@link ResourceKey} of the registry to make reloadable.
      * @param <T>           The type of the registry.
      */
-    default <T> void fromExistingRegistry(ResourceKey<Registry<T>> registryKey) {
+    default <T> void fromExistingRegistry(ResourceKey<? extends Registry<T>> registryKey) {
         IRDPRApiPlatformHelper.INSTANCE.fromExistingRegistry(this, registryKey);
     }
 
@@ -30,7 +30,7 @@ public interface IReloadableRegistryCreationHelper {
      * @param codec         The codec to use as the loading and network codec.
      * @param <T>           The type of the registry.
      */
-    default <T> void registerReloadableRegistry(ResourceKey<Registry<T>> registryKey, Codec<T> codec) {
+    default <T> void registerReloadableRegistry(ResourceKey<? extends Registry<T>> registryKey, Codec<T> codec) {
         registerNetworkableReloadableRegistry(registryKey, codec, null);
     }
 
@@ -42,7 +42,7 @@ public interface IReloadableRegistryCreationHelper {
      * @param codec         The codec to use as the loading and network codec.
      * @param <T>           The type of the registry.
      */
-    default <T> void registerNetworkableReloadableRegistry(ResourceKey<Registry<T>> registryKey, Codec<T> codec) {
+    default <T> void registerNetworkableReloadableRegistry(ResourceKey<? extends Registry<T>> registryKey, Codec<T> codec) {
         registerNetworkableReloadableRegistry(registryKey, codec, codec);
     }
 
@@ -51,10 +51,11 @@ public interface IReloadableRegistryCreationHelper {
      * This does not modify the registry when the world is loaded.
      *
      * @param registryKey   The {@link ResourceKey} of the registry to make reloadable.
-     * @param codec         The codec to use as the loading and network codec.
+     * @param codec         The codec to use for loading.
+     * @param networkCodec  The codec to use for loading over the network.
      * @param <T>           The type of the registry.
      */
-    <T> void registerNetworkableReloadableRegistry(ResourceKey<Registry<T>> registryKey, Codec<T> codec, Codec<T> networKCodec);
+    <T> void registerNetworkableReloadableRegistry(ResourceKey<? extends Registry<T>> registryKey, Codec<T> codec, Codec<T> networkCodec);
 
     /**
      * Sets a custom data laoder, which changes how the specific datapack registry is loaded.
@@ -64,5 +65,5 @@ public interface IReloadableRegistryCreationHelper {
      *                          usual loading logic for this registry.
      * @param <T>               The type of the registry.
      */
-    <T> void setCustomDataLoader(ResourceKey<Registry<T>> registryKey, CustomDataLoader<T> customDataLoader);
+    <T> void setCustomDataLoader(ResourceKey<? extends Registry<T>> registryKey, CustomDataLoader<T> customDataLoader);
 }

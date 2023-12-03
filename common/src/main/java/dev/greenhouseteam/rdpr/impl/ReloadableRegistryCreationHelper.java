@@ -13,17 +13,17 @@ public class ReloadableRegistryCreationHelper implements IReloadableRegistryCrea
     public static final IReloadableRegistryCreationHelper INSTANCE = new ReloadableRegistryCreationHelper();
 
     @Override
-    public <T> void registerNetworkableReloadableRegistry(ResourceKey<Registry<T>> registryKey, Codec<T> codec, Codec<T> networKCodec) {
+    public <T> void registerNetworkableReloadableRegistry(ResourceKey<? extends Registry<T>> registryKey, Codec<T> codec, Codec<T> networkCodec) {
         ReloadableRegistryData<T> registryData = new ReloadableRegistryData<>(new RegistryDataLoader.RegistryData<>(registryKey, codec));
 
         ReloadableDatapackRegistries.RELOADABLE_REGISTRY_DATA.put(registryKey, registryData);
-        if (networKCodec != null) {
-            ReloadableDatapackRegistries.NETWORKABLE_REGISTRIES.put(registryKey, new RegistrySynchronization.NetworkedRegistryData<>(registryKey, networKCodec));
+        if (networkCodec != null) {
+            ReloadableDatapackRegistries.NETWORKABLE_REGISTRIES.put(registryKey, new RegistrySynchronization.NetworkedRegistryData<>(registryKey, networkCodec));
         }
     }
 
     @Override
-    public <T> void setCustomDataLoader(ResourceKey<Registry<T>> resourceKey, CustomDataLoader<T> customDataLoader) {
+    public <T> void setCustomDataLoader(ResourceKey<? extends Registry<T>> resourceKey, CustomDataLoader<T> customDataLoader) {
         ReloadableDatapackRegistries.getReloadableRegistryData(resourceKey).setCustomDataLoader(customDataLoader);
     }
 
