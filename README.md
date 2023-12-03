@@ -1,31 +1,187 @@
-# MultiLoader Template
+![https://github.com/GreenhouseTeam/reloadable-datapack-registries/blob/1.20.2/neoforge/src/main/resources/rdpr.png]
+# Reloadable Data Pack Registries (RDPR)
 
-This project provides a Gradle project template that can compile mods for both Forge and Fabric using a common sourceset. This project does not require any third party libraries or dependencies. If you have any questions or want to discuss the project join our [Discord](https://discord.myceliummod.network).
+Reloadable Data Pack Registries is a library that allows modders to let their datapack/dynamic registries to reload with use of the /reload command.
 
-## Getting Started
+# Basic API Guide
 
-### IntelliJ IDEA
-This guide will show how to import the MultiLoader Template into IntelliJ IDEA. The setup process is roughly equivalent to setting up Forge and Fabric independently and should be very familiar to anyone who has worked with their MDKs.
+## 1. Get the project into your build script.
 
-1. Clone or download this repository to your computer.
-2. Configure the project by editing the `group`, `mod_name`, `mod_author`, and `mod_id` properties in the `gradle.properties` file. You will also need to change the `rootProject.name`  property in `settings.gradle`, this should match the folder name of your project, or else IDEA may complain.
-3. Open the template's root folder as a new project in IDEA. This is the folder that contains this README file and the gradlew executable.
-4. If your default JVM/JDK is not Java 17 you will encounter an error when opening the project. This error is fixed by going to `File > Settings > Build, Execution, Deployment > Build Tools > Gradle > Gradle JVM`and changing the value to a valid Java 17 JVM. You will also need to set the Project SDK to Java 17. This can be done by going to `File > Project Structure > Project SDK`. Once both have been set open the Gradle tab in IDEA and click the refresh button to reload the project.
-5. Open the Gradle tab in IDEA if it has not already been opened. Navigate to `Your Project > Common > Tasks > vanilla gradle > decompile`. Run this task to decompile Minecraft.
-6. Open the Gradle tab in IDEA if it has not already been opened. Navigate to `Your Project > Forge > Tasks > forgegradle runs > genIntellijRuns`. Run this task to set up run configurations for Forge.
-7. Open your Run/Debug Configurations. Under the Application category there should now be options to run Forge and Fabric projects. Select one of the client options and try to run it.
-8. Assuming you were able to run the game in step 7 your workspace should now be set up.
+Please use Jar in Jar for this dependency as I probably won't be releasing it outside of GitHub and my maven.
 
-### Eclipse
-While it is possible to use this template in Eclipse it is not recommended. During the development of this template multiple critical bugs and quirks related to Eclipse were found at nearly every level of the required build tools. While we continue to work with these tools to report and resolve issues support for projects like these are not there yet. For now Eclipse is considered unsupported by this project. The development cycle for build tools is notoriously slow so there are no ETAs available.
+```groovy
+repositories {
+    ...
+    maven {
+        url 'https://maven.merchantpug.net/releases/'
+    }
+}
+dependencies {
+    ...
 
-## Development Guide
-When using this template the majority of your mod is developed in the Common project. The Common project is compiled against the vanilla game and is used to hold code that is shared between the different loader-specific versions of your mod. The Common project has no knowledge or access to ModLoader specific code, apis, or concepts. Code that requires something from a specific loader must be done through the project that is specific to that loader, such as the Forge or Fabric project.
+    // Fabric/Quilt
+    modCompileOnly("dev.greenhouseteam.rdpr:rdpr-fabric:${rdpr_version}:api")
+    modRuntimeOnly(include("dev.greenhouseteam.rdpr:rdpr-fabric:${rdpr_version}"))
+    
+    // NeoForge
+    compileOnly "dev.greenhouseteam.rdpr:rdpr-neoforge:${rdpr_version}:api"
+    runtimeOnly(jarJar("dev.greenhouseteam.rdpr:rdpr-neoforge:${rdpr_version}")) {
+        jarJar.ranged(it, "[${rdpr_version},)")
+    }
 
-Loader specific projects such as the Forge and Fabric project are used to load the Common project into the game. These projects also define code that is specific to that loader. Loader specific projects can access all of the code in the Common project. It is important to remember that the Common project can not access code from loader specific projects.
+    // Common API (Multiloader Template/VanillaGradle)
+    compileOnly "dev.greenhouseteam.rdpr:rdpr-common-mojmap:${rdpr_version}:api"
+    
+    // Common API (Loom)
+    modCompileOnly "dev.greenhouseteam.rdpr:rdpr-common-intermediary:${rdpr_version}:api"
+}
+```
 
-## Removing Platforms and Loaders
-While the MultiLoader Template includes support for many platforms and loaders you can easily remove support for the ones you don't need. This can be done by deleting the subproject folder and then removing it from the `settings.gradle` file. For example if you wanted to remove support for Forge you would follow the following steps. 
+## 2. Register your registry.
 
-1. Delete the subproject folder. For example, delete `MultiLoader-Template/forge`.
-2. Remove the project from `settings.gradle`. For example, remove `include("forge")`. 
+Register your data packable registry as you usually would on your modloader of choice. Look or ask elsewhere if you don't know how to do that as this is out of scope for a tutorial on how to use this mod specifically.
+
+## 3. Work with the API!
+
+How this works is a little different depending on the modloader you are targeting, Fabric/Quilt uses the `rdpr` entrypoint with a class that extends `ReloadableRegistryPlugin`, whereas NeoForge uses an event on the mod event bus.
+
+All of these examples are in Mojmaps, as that's what I use, for a site that can help you convert anything you're unsure of to Yarn if you use those mappings, I would recommend [Linkie](https://linkie.shedaniel.dev/mappings).
+
+### Fabric/Quilt
+<details>
+
+As stated above, you are supposed to create a class that extends `ReloadableRegistryPlugin`
+
+Then inside the `createContents` method, you can call the `fromExistingRegistry` method using the IReloadableRegistryCreationHelper to get the values of the specific registry key as a reloadable registry.
+
+```java
+public class FabricExample extends ReloadableRegistryPlugin {
+    
+    public void createContents(IReloadableRegistryCreationHelper helper) {
+        // Generally you'll have your ResourceKeys elsewhere, just hook up the same resourcekey that you used to register your datapack.
+        helper.fromExistingRegistry(ExampleMod.BASIC_RECORD);
+    }
+}
+```
+
+`fabric.mod.json`
+```json
+{
+  "entrypoints": {
+    "rdpr": [
+      "your.reloadable.registry.plugin.Here"
+    ]
+  }
+}  
+```
+
+`quilt.mod.json`
+```json
+{
+  "quilt_loader": {
+    "entrypoints": {
+      "rdpr": "your.reloadable.registry.plugin.Here"
+    }
+  }
+}
+```
+
+</details>
+
+### NeoForge
+<details>
+
+On NeoForge, you must subscribe to the ReloadableRegistryEvent on the mod event bus.
+
+Then you can call the `fromExistingRegistry` method in the event to get the values of the specific registry key as a reloadable registry.
+
+The below is just one way you can subscribe to a NeoForge event, feel free to look into and use your preferred method.
+```java
+public class NeoForgeExample {
+    
+    @Mod.EventBusSubscriber(modid = CommonExample.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+    public static class ModEvents {
+
+        @SubscribeEvent
+        public static void addReloadableRegistries(ReloadableRegistryEvent event) {
+            // Generally you'll have your ResourceKeys elsewhere, just hook up the same resourcekey that you used to register your datapack.
+            helper.fromExistingRegistry(ExampleMod.BASIC_RECORD);
+        }
+    }
+}
+```
+
+</details>
+
+### MultiLoader/Architectury
+<details>
+
+You can actually use common code for the entrypoint/event. You are able to plug in `IReloadableRegistryCreationHelper` to a common method for use with loader specific registration.
+
+#### Common
+```java
+public class CommonExample {
+    public static final String MOD_ID = "example";
+    // Don't forget to register this as a data pack/dynamic registry with your loader's methods!
+    // You'll need a codec as well, but for the sake of space and making this example easy to understand, a codec is not included here.
+    public static final ResourceKey<Registry<BasicRecord>> BASIC_RECORD = ResourceKey.createRegistryKey(new ResourceLocation(MOD_ID, "basic_record"));
+    
+    /**
+     * A method that can be called on Fabric/Quilt/NeoForge's specific registration point
+     * that will act as if you just called it normally over there.
+     * 
+     * @param helper    The helper with methods for registering and modifying your data pack registry.
+     */
+    public static void createContents(IReloadableRegistryCreationHelper helper) {
+        // Register existing registries created in platform specific code as reloadable.
+        helper.fromExistingRegistry(BASIC_RECORD);
+    }
+}
+```
+
+#### Fabric/Quilt
+
+Look at the Fabric section if you want more information on this.
+
+```java
+public class FabricExample extends ReloadableRegistryPlugin {
+    public void createContents(IReloadableRegistryCreationHelper helper) {
+        // Call the common method in here!
+        CommonExample.createContents(helper);
+    }
+}
+```
+
+#### NeoForge
+
+Look at the NeoForge section if you want more information on this.
+
+```java
+public class NeoForgeExample {
+    
+    @Mod.EventBusSubscriber(modid = CommonExample.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+    public static class ModEvents {
+
+        @SubscribeEvent
+        public static void addReloadableRegistries(ReloadableRegistryEvent event) {
+            // Call the common method in here!
+            TestModReloadableRegistries.createContents(event);
+        }
+    }
+}
+```
+
+</details>
+
+## 4. You should be good to go!
+
+You should be good to go, but if you are caching anything anywhere, make sure to recache it upon reloading or unexpected results may happen.
+I would also not recommend making actual worldgen related registries reloadable, as it could lead to very unexpected results.
+
+
+# Backport?
+I probably won't be backporting this mod because I would probably have to re-adjust to Forge's registry system on their end, however, the license is open for you to do so. So feel free.
+
+# Why NeoForge instead of MinecraftForge?
+NeoForge has made some huge steps in the right direction when it comes to their registry system. Being allowed to use more vanilla code has worked out extremely well for me when it comes to this.
+On top of this, I am continuing forward developing for NeoForge instead of MinecraftForge, I'd wait for other devs to make the jump as NeoForge is more likely to be the main Forge based ModLoader for 1.20.2+.
