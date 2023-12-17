@@ -113,9 +113,6 @@ tasks.register('apiJar', Jar) {
     dependsOn(processApiResources)
     from sourceSets.api.output.classesDirs
     from sourceSets.api.output.resourcesDir
-    filesMatching(['pack.mcmeta']) {
-        expand project.properties
-    }
 }
 
 artifacts {
