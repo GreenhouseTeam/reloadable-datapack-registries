@@ -1,0 +1,33 @@
+plugins {
+    id "com.github.breadmoirai.github-release" version "2.4.1"
+}
+
+evaluationDependsOn(":common")
+evaluationDependsOn(":fabric")
+evaluationDependsOn(":neoforge")
+evaluationDependsOn(":common:intermediary")
+
+def releaseFiles = [
+    project(":common").jar.archiveFile,
+    project(":common").sourcesJar.archiveFile,
+    project(":fabric").remapJar.archiveFile,
+    project(":fabric").remapSourcesJar.archiveFile,
+    project(":neoforge").jar.archiveFile,
+    project(":neoforge").sourcesJar.archiveFile,
+    project(":common:intermediary").remapJar.archiveFile,
+    project(":common:intermediary").remapSourcesJar.archiveFile,
+]
+
+githubRelease {
+    token providers.environmentVariable("GITHUB_TOKEN")
+
+    owner "greenhouseteam"
+    repo "reloadable-datapack-registries"
+
+    releaseName "RDPR v${version}"
+    tagName "${version}"
+    body file("../CHANGELOG.md").text
+    targetCommitish branch
+
+    releaseAssets releaseFiles
+}
