@@ -25,9 +25,9 @@ public class ReloadableDatapackRegistries {
 
 	public static final String MOD_ID = "rdpr";
 
-	protected static final Map<ResourceKey<? extends Registry<?>>, ReloadableRegistryData<?>> RELOADABLE_REGISTRY_DATA = Collections.synchronizedMap(new LinkedHashMap<>());
-
+	protected static final Map<ResourceKey<? extends Registry<?>>, RegistryDataLoader.RegistryData<?>> RELOADABLE_REGISTRY_DATA = Collections.synchronizedMap(new LinkedHashMap<>());
 	protected static final Map<ResourceKey<? extends Registry<?>>, RegistrySynchronization.NetworkedRegistryData<?>> NETWORKABLE_REGISTRIES = Collections.synchronizedMap(new LinkedHashMap<>());
+
 	private static boolean hasLoaded = false;
 
 	public static void init() {
@@ -44,16 +44,12 @@ public class ReloadableDatapackRegistries {
 		return !NETWORKABLE_REGISTRIES.isEmpty();
 	}
 
-	public static <T> ReloadableRegistryData<T> getReloadableRegistryData(ResourceKey<? extends Registry<T>> resourceKey) {
-		return (ReloadableRegistryData<T>) RELOADABLE_REGISTRY_DATA.get(resourceKey);
-	}
-
 	public static List<RegistryDataLoader.RegistryData<?>> getAllRegistryData() {
 		if (!hasLoaded) {
 			throw new UnsupportedOperationException("Called ReloadableDatapackRegistries#getOrCreateAllRegistryData too early, please call it after registration.");
 		}
 
-		return ImmutableList.copyOf(RELOADABLE_REGISTRY_DATA.values().stream().map(ReloadableRegistryData::getRegistryData).toList());
+		return ImmutableList.copyOf(RELOADABLE_REGISTRY_DATA.values());
 	}
 
 	public static boolean isNetworkable(ResourceKey<? extends Registry<?>> key) {

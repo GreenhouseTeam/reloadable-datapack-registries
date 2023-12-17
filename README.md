@@ -9,6 +9,7 @@ Reloadable Data Pack Registries is a library that allows modders to allow datapa
 
 Please use Jar in Jar for this dependency as I probably won't be releasing it outside of GitHub and my maven.
 
+
 ```groovy
 repositories {
     ...
@@ -43,7 +44,7 @@ Register your data packable registry as you usually would on your modloader of c
 
 ## 3. Work with the API!
 
-How this works is a little different depending on the modloader you are targeting, Fabric/Quilt uses the `rdpr` entrypoint with a class that extends `ReloadableRegistryPlugin`, whereas NeoForge uses an event on the mod event bus.
+How this works is a little different depending on the modloader you are targeting, Fabric/Quilt uses the `rdpr` entrypoint with a class that extends `ReloadableRegistryPlugin`, whereas NeoForge uses the `ReloadableRegistryEvent` on the mod event bus.
 
 All of these examples are in Mojmaps, as that's what I use, for a site that can help you convert anything you're unsure of to Yarn if you use those mappings, I would recommend [Linkie](https://linkie.shedaniel.dev/mappings).
 
@@ -99,9 +100,13 @@ The below is just one way you can subscribe to a NeoForge event, feel free to lo
 ```java
 public class NeoForgeExample {
     
-    @Mod.EventBusSubscriber(modid = CommonExample.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+    @Mod.EventBusSubscriber(modid = "example", bus = Mod.EventBusSubscriber.Bus.MOD)
     public static class ModEvents {
-
+        /**
+         * 
+         * 
+         * @param event 
+         */
         @SubscribeEvent
         public static void addReloadableRegistries(ReloadableRegistryEvent event) {
             // Generally you'll have your ResourceKeys elsewhere, just hook up the same resourcekey that you used to register your datapack.

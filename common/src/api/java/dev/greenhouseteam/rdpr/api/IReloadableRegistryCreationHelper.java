@@ -1,12 +1,9 @@
 package dev.greenhouseteam.rdpr.api;
 
 import com.mojang.serialization.Codec;
-import dev.greenhouseteam.rdpr.api.loader.CustomDataLoader;
 import dev.greenhouseteam.rdpr.api.platform.IRDPRApiPlatformHelper;
-import dev.greenhouseteam.rdpr.api.platform.ServiceUtil;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
-import org.jetbrains.annotations.ApiStatus;
 
 public interface IReloadableRegistryCreationHelper {
 
@@ -57,13 +54,4 @@ public interface IReloadableRegistryCreationHelper {
      */
     <T> void registerNetworkableReloadableRegistry(ResourceKey<Registry<T>> registryKey, Codec<T> codec, Codec<T> networkCodec);
 
-    /**
-     * Sets a custom data laoder, which changes how the specific datapack registry is loaded.
-     *
-     * @param registryKey       The {@link ResourceKey} of the registry to make reloadable.
-     * @param customDataLoader  The {@link CustomDataLoader} that will run instead of the
-     *                          usual loading logic for this registry.
-     * @param <T>               The type of the registry.
-     */
-    <T> void setCustomDataLoader(ResourceKey<Registry<T>> registryKey, CustomDataLoader<T> customDataLoader);
 }
