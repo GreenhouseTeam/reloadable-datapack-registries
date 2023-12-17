@@ -9,13 +9,9 @@ evaluationDependsOn(":common:intermediary")
 
 def releaseFiles = [
     project(":common").jar.archiveFile,
-    project(":common").sourcesJar.archiveFile,
     project(":fabric").remapJar.archiveFile,
-    project(":fabric").remapSourcesJar.archiveFile,
-    project(":neoforge").jar.archiveFile,
-    project(":neoforge").sourcesJar.archiveFile,
-    project(":common:intermediary").remapJar.archiveFile,
-    project(":common:intermediary").remapSourcesJar.archiveFile,
+    project(":neoforge").jar.archiveFile
+    project(":common:intermediary").remapJar.archiveFile
 ]
 
 githubRelease {

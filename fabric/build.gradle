@@ -1,3 +1,5 @@
+import net.fabricmc.loom.task.RemapJarTask
+
 plugins {
     id 'java'
     id 'idea'
@@ -127,15 +129,27 @@ artifacts {
     api apiJar
 }
 
-build.dependsOn apiJar
+tasks.register("remapApiJar", RemapJarTask, task -> {
+    final AbstractArchiveTask jarTask = getTasks().named("apiJar").get();
+    task.dependsOn(jarTask)
+
+    task.getInputFile().convention(jarTask.getArchiveFile())
+    task.dependsOn(getTasks().named("apiJar"))
+    task.archiveFileName.set(archiveFileName.get().replace(".jar", "-api.jar"))
+    task.targetNamespace.set("intermediary")
+
+    remapperIsolation = true
+})
+
+build.dependsOn remapApiJar
 
 publishing {
     publications {
         mavenJava(MavenPublication) {
             artifactId base.archivesName.get()
             from components.java
-            artifact(apiJar) {
-                builtBy apiJar
+            artifact(remapApiJar) {
+                builtBy remapApiJar
                 classifier 'api'
             }
         }
