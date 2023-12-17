@@ -10,7 +10,7 @@ evaluationDependsOn(":common:intermediary")
 def releaseFiles = [
     project(":common").jar.archiveFile,
     project(":fabric").remapJar.archiveFile,
-    project(":neoforge").jar.archiveFile
+    project(":neoforge").jar.archiveFile,
     project(":common:intermediary").remapJar.archiveFile
 ]
 
