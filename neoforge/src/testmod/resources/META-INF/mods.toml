@@ -19,14 +19,12 @@ config = "${mod_id}.neoforge.mixins.json"
 
 [[dependencies.${mod_id}]]
 modId = "neoforge"
-mandatory = true
 versionRange = "${neoforge_loader_version_range}"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.${mod_id}]]
 modId = "minecraft"
-mandatory = true
 versionRange = "${minecraft_version_range}"
 ordering = "NONE"
 side = "BOTH"
@@ -41,21 +39,18 @@ description = '''Reloadable Datapack Registries Testmod'''
 
 [[dependencies.rdprtestmod]]
 modId = "neoforge"
-mandatory = true
 versionRange = "${neoforge_loader_version_range}"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.rdprtestmod]]
 modId = "minecraft"
-mandatory = true
 versionRange = "${minecraft_version_range}"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.rdprtestmod]]
 modId = "${mod_id}"
-mandatory = true
 versionRange = "[1.0.0,)"
 ordering = "NONE"
 side = "BOTH"
