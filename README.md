@@ -3,6 +3,9 @@
 
 Reloadable Data Pack Registries is a library that allows modders to allow datapack/dynamic registries to reload upon use of the /reload command.
 
+For a user, you likely won't need to download this, as mod developers are encouraged to include RDPR inside their own mods, hence why I am not going to be putting this on CurseForge or Modrinth.
+On top of the above, it does nothing if a mod doesn't hook into it, so there's really not much point to having workable jars released.
+
 # Basic API Guide
 
 ## 1. Get the project into your build script.
@@ -57,7 +60,6 @@ Then inside the `createContents` method, you can call the `fromExistingRegistry`
 
 ```java
 public class FabricExample extends ReloadableRegistryPlugin {
-    
     public void createContents(IReloadableRegistryCreationHelper helper) {
         // Generally you'll have your ResourceKeys elsewhere, just hook up the same resourcekey that you used to register your datapack.
         helper.fromExistingRegistry(ExampleMod.BASIC_RECORD);
@@ -102,11 +104,6 @@ public class NeoForgeExample {
     
     @Mod.EventBusSubscriber(modid = "example", bus = Mod.EventBusSubscriber.Bus.MOD)
     public static class ModEvents {
-        /**
-         * 
-         * 
-         * @param event 
-         */
         @SubscribeEvent
         public static void addReloadableRegistries(ReloadableRegistryEvent event) {
             // Generally you'll have your ResourceKeys elsewhere, just hook up the same resourcekey that you used to register your datapack.
