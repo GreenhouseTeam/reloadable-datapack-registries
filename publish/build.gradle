@@ -14,7 +14,8 @@ def releaseFiles = [
     project(":common:intermediary").remapJar.archiveFile
 ]
 
-tasks.named("githubRelease").dependsOn build
+tasks.githubRelease.dependsOn "build"
+tasks.githubRelease.dependsOn project(":fabric").remapApiJar
 
 githubRelease {
     token providers.environmentVariable("GITHUB_TOKEN")
@@ -27,5 +28,5 @@ githubRelease {
     body file("../CHANGELOG.md").text
     targetCommitish branch
 
-    releaseAssets releaseFiles
+    releaseAssets(releaseFiles)
 }
