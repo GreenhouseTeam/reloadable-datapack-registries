@@ -15,7 +15,6 @@ def releaseFiles = [
 ]
 
 tasks.githubRelease.dependsOn "build"
-tasks.githubRelease.dependsOn project(":fabric").remapApiJar
 
 githubRelease {
     token providers.environmentVariable("GITHUB_TOKEN")

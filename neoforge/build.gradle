@@ -62,8 +62,12 @@ dependencies {
 // NeoGradle compiles the game, but we don't want to add our common code to the game's code
 Spec<Task> notNeoTask = { Task it -> !it.name.startsWith("neo") } as Spec<Task>
 
+
 tasks.withType(JavaCompile).matching(notNeoTask).configureEach {
     source(project(":common").sourceSets.api.allSource)
+}
+
+compileJava {
     source(sourceSets.api.allSource)
     source(project(":common").sourceSets.main.allSource)
 }
@@ -80,7 +84,7 @@ tasks.named("sourcesJar", Jar) {
     from(project(":common").sourceSets.main.allSource)
 }
 
-tasks.withType(ProcessResources).matching(notNeoTask).configureEach {
+processResources {
     from project(":common").sourceSets.main.resources
 
     filesMatching("*.mixins.json") {
@@ -88,14 +92,9 @@ tasks.withType(ProcessResources).matching(notNeoTask).configureEach {
     }
 }
 
-compileApiJava {
-    source(project(":common").sourceSets.api.allSource)
-}
-
 // Whilst NeoForge doesn't allow for multi mod setups, we can do this
 // to add the main classes to the testmod source.
 compileTestmodJava {
-    source(project(":common").sourceSets.api.allSource)
     source(project(":common").sourceSets.main.allSource)
     source(project(":common").sourceSets.testmod.allSource)
     source(sourceSets.api.allSource)
@@ -109,17 +108,14 @@ processTestmodResources {
 
 tasks.register('apiJar', Jar) {
     archiveClassifier = "api"
-    dependsOn(compileApiJava)
-    dependsOn(processApiResources)
     from sourceSets.api.output.classesDirs
-    from sourceSets.api.output.resourcesDir
 }
 
 artifacts {
     api apiJar
 }
 
-build.dependsOn apiJar
+assemble.dependsOn apiJar
 
 processTestmodResources {
     def expandProps = [

@@ -23,7 +23,6 @@ tasks.register("remapCommonJar", RemapJarTask,  task -> {
     task.dependsOn(jarTask)
 
     task.getInputFile().convention(jarTask.getArchiveFile())
-    task.dependsOn(project(":common").getTasks().named("jar"))
     task.archiveFileName.set(archiveFileName.get().replace(".jar", "-intermediary.jar"))
     task.targetNamespace.set("intermediary")
 
@@ -35,9 +34,10 @@ tasks.register("remapApiJar", RemapJarTask,  task -> {
     final AbstractArchiveTask jarTask = project(":common").getTasks().named("apiJar", AbstractArchiveTask.class).get();
     task.dependsOn(jarTask)
 
+    task.archiveClassifier = 'api'
+
     task.getInputFile().convention(jarTask.getArchiveFile())
-    task.dependsOn(project(":common").getTasks().named("apiJar"))
-    task.archiveFileName.set(archiveFileName.get().replace(".jar", "-api-intermediary.jar"))
+    task.archiveFileName.set(archiveFileName.get().replace(".jar", "-intermediary.jar"))
     task.targetNamespace.set("intermediary")
 
     remapperIsolation = true

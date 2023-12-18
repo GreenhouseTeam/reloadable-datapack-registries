@@ -1,1 +1,2 @@
-- [NEOFORGE] Fix missing `mandatory` fields in mods.toml
+- Fix built jars.
+- [NEOFORGE] Fix missing `mandatory` fields in mods.toml.

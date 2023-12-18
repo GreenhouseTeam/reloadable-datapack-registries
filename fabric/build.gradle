@@ -80,17 +80,13 @@ loom {
 
 tasks.withType(JavaCompile).configureEach {
     source(project(":common").sourceSets.api.allSource)
-    source(sourceSets.api.allSource)
-    source(project(":common").sourceSets.main.allSource)
 }
 tasks.withType(Javadoc).configureEach {
     source(project(":common").sourceSets.api.allJava)
-    source(sourceSets.api.allJava)
     source(project(":common").sourceSets.main.allJava)
 }
 tasks.named("sourcesJar", Jar) {
     from(project(":common").sourceSets.api.allSource)
-    from(sourceSets.api.allSource)
     from(project(":common").sourceSets.main.allSource)
 }
 
@@ -98,12 +94,7 @@ processResources {
     from project(":common").sourceSets.main.resources
 }
 
-compileApiJava {
-    source(project(":common").sourceSets.api.allSource)
-}
-
 compileTestmodJava {
-    source(project(":common").sourceSets.api.allSource)
     source(project(":common").sourceSets.main.allSource)
     source(project(":common").sourceSets.testmod.allSource)
     source(sourceSets.main.allSource)
@@ -115,31 +106,33 @@ processTestmodResources {
 }
 
 tasks.register('apiJar', Jar) {
-    archiveClassifier = "api"
-    dependsOn(compileApiJava)
-    dependsOn(processApiResources)
+    archiveClassifier = "nonremapped-api"
     from sourceSets.api.output.classesDirs
-    from sourceSets.api.output.resourcesDir
 }
 
 // Credits to Witixin. https://gist.github.com/Witixin1512/bbb8484523ea6a0e8440f17621f89f95
 tasks.register("remapApiJar", RemapJarTask,  task -> {
-    final AbstractArchiveTask jarTask = getTasks().named("apiJar", AbstractArchiveTask.class).get();
-    task.dependsOn(jarTask)
+    task.dependsOn(apiJar)
 
-    task.getInputFile().convention(jarTask.getArchiveFile())
-    task.dependsOn(getTasks().named("apiJar"))
+    task.archiveClassifier = 'api'
+
+    task.setInputFile(apiJar.archiveFile)
     task.targetNamespace.set("intermediary")
 
     remapperIsolation = true
 })
 
+tasks.create("deleteNonRemapped", Delete) {
+    dependsOn(remapApiJar)
+    delete(apiJar.archiveFile)
+}
+
 artifacts {
-    api apiJar
+    api remapApiJar
 }
 
 
-build.dependsOn remapApiJar
+assemble.dependsOn deleteNonRemapped
 
 publishing {
     publications {

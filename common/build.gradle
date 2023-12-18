@@ -43,19 +43,16 @@ dependencies {
 
 tasks.register('apiJar', Jar) {
     archiveClassifier = "api"
-    dependsOn(compileApiJava)
-    dependsOn(processApiResources)
-    from sourceSets.api.output.classesDirs
-    from sourceSets.api.output.resourcesDir
+    from sourceSets.api.allSource
 }
 
 artifacts {
     api apiJar
 }
 
-build.dependsOn apiJar
+assemble.dependsOn apiJar
 
-tasks.withType(JavaCompile).configureEach {
+compileJava {
     source(sourceSets.api.allSource)
 }
 tasks.withType(Javadoc).configureEach {
