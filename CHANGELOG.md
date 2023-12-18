@@ -1,1 +1,1 @@
-Initial release.
+- [NEOFORGE] Fix missing `mandatory` fields in mods.toml
