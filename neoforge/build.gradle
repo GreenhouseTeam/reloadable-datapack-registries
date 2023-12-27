@@ -101,6 +101,7 @@ compileTestmodJava {
     source(sourceSets.main.allSource)
 }
 processTestmodResources {
+    from project(":common").sourceSets.main.resources
     from project(":common").sourceSets.testmod.resources
     from sourceSets.main.resources
     duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
@@ -115,7 +116,7 @@ artifacts {
     api apiJar
 }
 
-assemble.dependsOn apiJar
+build.dependsOn apiJar
 
 processTestmodResources {
     def expandProps = [
@@ -123,6 +124,7 @@ processTestmodResources {
             "group": project.group, //Else we target the task's group.
             "minecraft_version": minecraft_version,
             "minecraft_version_range": minecraft_version_range,
+            "pack_format": pack_format,
             "mod_name": mod_name,
             "mod_id": mod_id,
             "license": license,

@@ -1,2 +1,4 @@
-- Fix built jars.
-- [NEOFORGE] Fix missing `mandatory` fields in mods.toml.
+## Bugfixes
+- Fix Common API jar.
+- Fixed pack version.
+- Change release files to just include Fabric/NeoForge production jars.

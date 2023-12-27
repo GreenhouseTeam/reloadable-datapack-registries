@@ -132,7 +132,7 @@ artifacts {
 }
 
 
-assemble.dependsOn deleteNonRemapped
+build.dependsOn deleteNonRemapped
 
 publishing {
     publications {
