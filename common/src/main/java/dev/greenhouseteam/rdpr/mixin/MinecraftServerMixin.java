@@ -42,7 +42,7 @@ public abstract class MinecraftServerMixin {
 
     @Shadow public abstract RegistryAccess.Frozen registryAccess();
 
-    @Inject(method = { "method_29437", "lambda$reloadResources$26" }, at = @At(value = "INVOKE", target = "Lnet/minecraft/server/packs/resources/MultiPackResourceManager;<init>(Lnet/minecraft/server/packs/PackType;Ljava/util/List;)V", shift = At.Shift.BY, by = 2), locals = LocalCapture.CAPTURE_FAILHARD, cancellable = true)
+    @Inject(method = { "method_29437", "lambda$reloadResources$27" }, at = @At(value = "INVOKE", target = "Lnet/minecraft/server/packs/resources/MultiPackResourceManager;<init>(Lnet/minecraft/server/packs/PackType;Ljava/util/List;)V", shift = At.Shift.BY, by = 2), locals = LocalCapture.CAPTURE_FAILHARD, cancellable = true)
     private void rdpr$reloadReloadableRegistries(RegistryAccess.Frozen unusedFrozen, ImmutableList immutableList, CallbackInfoReturnable<CompletionStage> cir, CloseableResourceManager resourceManager) {
         if (!ReloadableDatapackRegistries.getAllRegistryData().isEmpty()) {
             RegistryAccess.Frozen previous = this.registries().getLayer(RegistryLayer.WORLDGEN);
@@ -61,7 +61,7 @@ public abstract class MinecraftServerMixin {
         }
     }
 
-    @ModifyArg(method = { "method_29437", "lambda$reloadResources$26" }, at = @At(value = "INVOKE", target = "Lnet/minecraft/server/ReloadableServerResources;loadResources(Lnet/minecraft/server/packs/resources/ResourceManager;Lnet/minecraft/core/RegistryAccess$Frozen;Lnet/minecraft/world/flag/FeatureFlagSet;Lnet/minecraft/commands/Commands$CommandSelection;ILjava/util/concurrent/Executor;Ljava/util/concurrent/Executor;)Ljava/util/concurrent/CompletableFuture;"), index = 1)
+    @ModifyArg(method = { "method_29437", "lambda$reloadResources$27" }, at = @At(value = "INVOKE", target = "Lnet/minecraft/server/ReloadableServerResources;loadResources(Lnet/minecraft/server/packs/resources/ResourceManager;Lnet/minecraft/core/RegistryAccess$Frozen;Lnet/minecraft/world/flag/FeatureFlagSet;Lnet/minecraft/commands/Commands$CommandSelection;ILjava/util/concurrent/Executor;Ljava/util/concurrent/Executor;)Ljava/util/concurrent/CompletableFuture;"), index = 1)
     private RegistryAccess.Frozen rdpr$reloadListenersWithNewFrozen(RegistryAccess.Frozen original) {
         if (ReloadableDatapackRegistries.getAllRegistryData().isEmpty())
             return original;
@@ -77,7 +77,7 @@ public abstract class MinecraftServerMixin {
         CompletableFuture.supplyAsync(() -> rdpr$previousFrozenAccess = null);
     }
 
-    @Inject(method = { "method_29440", "lambda$reloadResources$27" }, at = @At(value = "INVOKE", target = "Lnet/minecraft/server/ReloadableServerResources;updateRegistryTags(Lnet/minecraft/core/RegistryAccess;)V"))
+    @Inject(method = { "method_29440", "lambda$reloadResources$28" }, at = @At(value = "INVOKE", target = "Lnet/minecraft/server/ReloadableServerResources;updateRegistryTags(Lnet/minecraft/core/RegistryAccess;)V"))
     private void rdpr$reloadRegistriesAsync(Collection collection, MinecraftServer.ReloadableResources reloadableResources, CallbackInfo ci) {
         this.getAllLevels().forEach(serverLevel -> ((LevelAccessor)serverLevel).rdpr$setRegistryAccess(this.registryAccess()));
         ((PlayerListAccessor)this.getPlayerList()).rdpr$setRegisties(this.registries());

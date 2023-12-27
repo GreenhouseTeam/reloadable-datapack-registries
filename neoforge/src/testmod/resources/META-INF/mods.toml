@@ -14,8 +14,6 @@ description = '''${description}'''
 
 [[mixins]]
 config = "${mod_id}.mixins.json"
-[[mixins]]
-config = "${mod_id}.neoforge.mixins.json"
 
 [[dependencies.${mod_id}]]
 modId = "neoforge"
@@ -34,7 +32,6 @@ side = "BOTH"
 [[mods]]
 modId = "rdprtestmod"
 version = "${version}"
-mandatory = true
 displayName = "Reloadable Data Pack Registries Testmod"
 displayURL = "https://github.com/GreenhouseTeam/reloadable-datapack-registries"
 authors = "MerchantPug"
@@ -42,14 +39,14 @@ description = '''Reloadable Datapack Registries Testmod'''
 
 [[dependencies.rdprtestmod]]
 modId = "neoforge"
-mandatory = true
+type = "required"
 versionRange = "${neoforge_loader_version_range}"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.rdprtestmod]]
 modId = "minecraft"
-mandatory = true
+type = "required"
 versionRange = "${minecraft_version_range}"
 ordering = "NONE"
 side = "BOTH"
