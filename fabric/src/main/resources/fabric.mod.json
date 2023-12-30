@@ -21,6 +21,7 @@
           "dev.greenhouseteam.rdpr.impl.client.RDPRClientFabric"
         ]
     },
+    "accessWidener" : "rdpr.accesswidener",
     "mixins": [
         "${mod_id}.mixins.json",
         "${mod_id}.fabric.mixins.json"
